@@ -44,6 +44,16 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id_zawodnika" id="917C8A34-CECE-5112-12D5-0E73F433E3DB">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-12 20:01:41 UTC</createdTime>
+<generatorID>A5CBB368-84C8-1663-A720-5DDF8321997B</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="D66DDCCD-979B-311F-82B8-2C9C54127F54" name="Rekord PK">

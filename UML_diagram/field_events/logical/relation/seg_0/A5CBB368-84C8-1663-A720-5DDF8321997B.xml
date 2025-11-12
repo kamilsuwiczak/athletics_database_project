@@ -3,16 +3,16 @@
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 20:51:49 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
-<targetPk>D66DDCCD-979B-311F-82B8-2C9C54127F54</targetPk>
+<targetPk>DB089DFB-4D28-7CDB-332A-B1A1999DBEDB</targetPk>
 <identifying>false</identifying>
 <nameOnSource>Pobija</nameOnSource>
 <nameOnTarget>Jest pobity przez</nameOnTarget>
 <optionalSource>true</optionalSource>
-<optionalTarget>true</optionalTarget>
+<optionalTarget>false</optionalTarget>
 <sourceCardinality>*</sourceCardinality>
-<sourceEntity>73E4BEBA-0B47-3BE2-6C55-48580C89B318</sourceEntity>
+<sourceEntity>A5B139CA-CBC3-E699-D3F9-6828E843C8C0</sourceEntity>
 <targetCardinalityString>1</targetCardinalityString>
-<targetEntity>A5B139CA-CBC3-E699-D3F9-6828E843C8C0</targetEntity>
+<targetEntity>73E4BEBA-0B47-3BE2-6C55-48580C89B318</targetEntity>
 <transferable>true</transferable>
 <deleteRule>NO ACTION</deleteRule>
 </Relation>

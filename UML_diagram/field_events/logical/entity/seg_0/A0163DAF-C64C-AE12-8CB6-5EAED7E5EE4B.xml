@@ -4,10 +4,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>77D3D389-784E-62A2-8093-14A915FB9110</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <adequatelyNormalized>NO</adequatelyNormalized>
 <expectedVolumes>0</expectedVolumes>
 <fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
@@ -17,27 +13,11 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="#id_wyniku" id="F9D67C55-1C91-6E9A-BB3B-F2340F69164E">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>FB916F66-5A61-E6F8-E0FA-D7F022A6D9F0</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="rezultat" id="168B109E-6ACA-2C72-DAAC-B087BA245438">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>4CC85C5C-C5ED-0472-4807-E5754CC0064B</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -46,10 +26,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>FBCF79F1-1B11-273F-8D63-3FA60572097B</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -58,10 +34,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>EAF61116-DDC6-2E9C-E944-16798DF6AF46</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -70,25 +42,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>029735B6-5A2F-4CD4-231E-71320FB210EF</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="id_pogody" id="D0D284D2-57BC-6CB4-090C-A716C0BDA3C6">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<generatorID>EDB95B2E-74F7-0484-CA1E-6D7A2B9A5A59</generatorID>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>AA53E845-64DB-52A1-8D66-B302138CFFF9</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>1AE94752-C6AC-9CBC-17F5-25D414DFA9C2</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -97,10 +50,6 @@
 <createdTime>2025-11-08 19:40:03 UTC</createdTime>
 <generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
@@ -110,11 +59,16 @@
 <createdTime>2025-11-08 20:02:54 UTC</createdTime>
 <generatorID>B82037AE-6397-CC75-A6FE-6137E8733B93</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <referedAttribute>8BE636EE-D879-1AA0-4298-D98E889EA3A8</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="#id_zawodów" id="266656C3-B78B-A809-AC9B-57669F0C7614">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-12 19:47:01 UTC</createdTime>
+<generatorID>C23BCE02-4A00-9E2D-225E-A3C505A3E2E0</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>E584240F-2D0D-A122-10C7-C70FEC9FDB6D</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -125,13 +79,10 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>63C0C346-5833-A4DE-DC62-0E06439C10DD</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>F9D67C55-1C91-6E9A-BB3B-F2340F69164E</attributeRef>
+<attributeRef>266656C3-B78B-A809-AC9B-57669F0C7614</attributeRef>
+<attributeRef>0FF5E934-A8AC-C900-A964-BAFC63020168</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>
