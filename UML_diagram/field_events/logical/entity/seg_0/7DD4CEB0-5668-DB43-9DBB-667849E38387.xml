@@ -1,0 +1,111 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="7DD4CEB0-5668-DB43-9DBB-667849E38387" name="Rekord_zyciowy">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>0117CEEB-76DF-96B3-0DC3-8A7522E8C957</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id_rekord_zyciowego" id="B633292C-F509-9C58-F63D-281F1EFAD0FC">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>76BC49F8-A258-2A4B-5C0A-6E5B32A5230B</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="rezultat" id="DE4B406C-FFB8-35AF-029A-0D12AE16E697">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>64C83830-208D-3CD5-2E4D-29CA54B098AA</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="data_rezultatu" id="884EDABB-F5B2-0A74-29DB-A6699C608B6D">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>11CA0AFC-3586-3C8A-5807-BB38C4859C40</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id_zawodnika" id="71DBF39C-E5C9-8D9C-CB15-1DA0571A943D">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>883BBD92-ED53-8D8F-7DA0-23C73ED006AF</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="wynik_punktowy" id="3F8B0CF8-9D70-6B1F-A27A-AF44ADECEA3D">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 20:07:27 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="#id_konkurencji" id="55902EB8-C767-6E04-4E40-4C2DC265679D">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 20:37:58 UTC</createdTime>
+<generatorID>E49D0BE4-2D5E-8680-8709-FF49AA6B1B60</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<referedAttribute>8BE636EE-D879-1AA0-4298-D98E889EA3A8</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="112793BC-9A5F-13EF-507C-8C0EC477796C" name="Wynik_zyciowy PK">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>B5149165-470D-4AD8-195C-24A9CC5444C3</importedID>
+<engineerTo>
+<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
+<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>B633292C-F509-9C58-F63D-281F1EFAD0FC</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

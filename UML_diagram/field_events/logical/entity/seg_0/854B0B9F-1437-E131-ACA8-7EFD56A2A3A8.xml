@@ -1,0 +1,63 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="854B0B9F-1437-E131-ACA8-7EFD56A2A3A8" name="Państwo">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>13D133FC-8838-C682-FE16-17A4B7336C05</importedID>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="kod_iso_3166-1_alfa3" id="813F061A-04BC-31B4-1B19-7D4F2B937942">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>7BA6ACA0-FFD6-430E-7B43-4B5FA9A5752E</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwa_panstwa" id="C6D33F92-C157-FDF9-1E75-54D817F4E67A">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>0A5D7131-4D4F-2349-9437-BCD9F2DCB834</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="stolica" id="D6207E92-16C6-DDE4-6AE6-4DFE32580434">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>FE5BC126-8199-AB91-58E5-A2FD29E56086</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="kontynent" id="972EFA2C-E4B2-E26E-26D0-058160E2D19C">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>9FD31271-F118-3340-4055-713158439184</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="0C263C6F-3EB1-8C6C-FEC5-1DACC89102F7" name="Państwo PK">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>54D660A4-6562-0A2E-8987-A3B7E9C9DB05</importedID>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>813F061A-04BC-31B4-1B19-7D4F2B937942</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

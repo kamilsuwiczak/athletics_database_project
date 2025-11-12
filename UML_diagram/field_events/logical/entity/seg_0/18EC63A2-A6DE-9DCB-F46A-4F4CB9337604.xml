@@ -1,0 +1,62 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="18EC63A2-A6DE-9DCB-F46A-4F4CB9337604" name="Stadion">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>07D2E320-CA85-F232-FDFA-AB011BC490A8</importedID>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id_stadionu" id="4DF19EB6-FBD1-D574-F416-30E423D115D5">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>B1BF3F34-D879-D71A-B44A-4CF1D1D6923A</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwa_stadionu" id="D5D22535-25E8-B770-6533-422A50859F9A">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>5802831F-69AD-8A11-79CA-95425C3D5C5D</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="miasto" id="9B934982-9350-8EC5-6839-49F32F929B64">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>50048463-4B30-F861-4D60-9D6290B32726</importedID>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="kod_iso_3166-1_alfa3" id="AF24B5E4-704B-EA56-F831-F5C36F96CB79">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:57:58 UTC</createdTime>
+<generatorID>EC03F34C-5459-FCA0-9A88-744C99686DB7</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>813F061A-04BC-31B4-1B19-7D4F2B937942</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="00E595D1-1856-A206-2C75-BCD84C255CBC" name="Stadion PK">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:32:30 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<importedID>E9E2E7FC-A516-BD7C-386F-0D5D504C3A73</importedID>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>4DF19EB6-FBD1-D574-F416-30E423D115D5</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

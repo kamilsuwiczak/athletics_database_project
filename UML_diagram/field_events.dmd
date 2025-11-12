@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="field_events" id="89228E33-ABAF-9C27-9F3F-5B39F037DDDC" version="3.5">
+<createdBy>marci</createdBy>
+<createdTime>2025-11-08 19:30:17 UTC</createdTime>
+<ownerDesignName>field_events</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>89228E33-ABAF-9C27-9F3F-5B39F037DDDC</designId>
+<usedDesignStorageDescriptors>
+<designDescr class="oracle.dbtools.crest.model.design.Design$DesignStorageDesc" id="2CCF01BB-504E-8BCB-9AD8-C70ECE39DF04">
+<designStoragePath>C:\Users\marci\Desktop\athletics\athletics</designStoragePath>
+</designDescr>
+</usedDesignStorageDescriptors>
+</OSDM_Design>
