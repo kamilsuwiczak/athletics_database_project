@@ -45,30 +45,57 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id_zawodnika" id="0FF5E934-A8AC-C900-A964-BAFC63020168">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:40:03 UTC</createdTime>
-<generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
-<ownerDesignName>field_events</ownerDesignName>
-<referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="#id_konkurencji" id="17A36C6C-FB84-5AD0-25D7-7ABA6272E354">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 20:02:54 UTC</createdTime>
+<Attribute name="nazwa_konkurencji" id="3E97B9C1-7A69-BDEA-0097-802AF76D69C8">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:30:33 UTC</createdTime>
 <generatorID>B82037AE-6397-CC75-A6FE-6137E8733B93</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<referedAttribute>8BE636EE-D879-1AA0-4298-D98E889EA3A8</referedAttribute>
+<referedAttribute>0F3C73CD-087C-F929-C17F-2650AEBA8A5D</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="#id_zawodów" id="266656C3-B78B-A809-AC9B-57669F0C7614">
+<Attribute name="nazwa_zawodów" id="21D3D3BF-C4B0-7D01-12AF-ADA6708E41FA">
 <createdBy>kamil</createdBy>
-<createdTime>2025-11-12 19:47:01 UTC</createdTime>
+<createdTime>2025-11-19 14:33:32 UTC</createdTime>
 <generatorID>C23BCE02-4A00-9E2D-225E-A3C505A3E2E0</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<referedAttribute>E584240F-2D0D-A122-10C7-C70FEC9FDB6D</referedAttribute>
+<referedAttribute>C815D574-CBC9-A7CB-9A87-E928394F50F8</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="imie" id="0FC728F7-5E49-B737-72AC-AA345605DEDD">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:47 UTC</createdTime>
+<generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>04F6D88C-06DD-F800-BC1C-F6295582F5E7</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwisko" id="1375DB67-F911-CFE4-5C99-36EF1AF7A4B4">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:49 UTC</createdTime>
+<generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>EDF62F86-0380-CE89-613F-58D0F9F5D509</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="data_urodzenia" id="B417E9AC-D650-2DAE-FCE2-E2B409D0C97E">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:51 UTC</createdTime>
+<generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>CD999915-19D4-AE39-5F09-3A5A1D5CE35B</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="plec" id="B839F342-B657-E887-6016-3A1042DDF8CF">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:53 UTC</createdTime>
+<generatorID>0AB8DF99-998A-028A-FFFC-90A6C4D3A024</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>98E0E734-DAB8-7F46-ECDA-5472F9480B98</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -81,8 +108,11 @@
 <importedID>63C0C346-5833-A4DE-DC62-0E06439C10DD</importedID>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>266656C3-B78B-A809-AC9B-57669F0C7614</attributeRef>
-<attributeRef>0FF5E934-A8AC-C900-A964-BAFC63020168</attributeRef>
+<attributeRef>21D3D3BF-C4B0-7D01-12AF-ADA6708E41FA</attributeRef>
+<attributeRef>0FC728F7-5E49-B737-72AC-AA345605DEDD</attributeRef>
+<attributeRef>1375DB67-F911-CFE4-5C99-36EF1AF7A4B4</attributeRef>
+<attributeRef>B417E9AC-D650-2DAE-FCE2-E2B409D0C97E</attributeRef>
+<attributeRef>B839F342-B657-E887-6016-3A1042DDF8CF</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

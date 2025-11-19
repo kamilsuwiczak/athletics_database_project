@@ -7,8 +7,8 @@
 <identifying>false</identifying>
 <nameOnSource>Pobija</nameOnSource>
 <nameOnTarget>Jest pobity przez</nameOnTarget>
-<optionalSource>true</optionalSource>
-<optionalTarget>false</optionalTarget>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
 <sourceCardinality>*</sourceCardinality>
 <sourceEntity>A5B139CA-CBC3-E699-D3F9-6828E843C8C0</sourceEntity>
 <targetCardinalityString>1</targetCardinalityString>

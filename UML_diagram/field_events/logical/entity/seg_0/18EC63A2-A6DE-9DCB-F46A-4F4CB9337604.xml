@@ -13,14 +13,6 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="id_stadionu" id="4DF19EB6-FBD1-D574-F416-30E423D115D5">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>B1BF3F34-D879-D71A-B44A-4CF1D1D6923A</importedID>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="nazwa_stadionu" id="D5D22535-25E8-B770-6533-422A50859F9A">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
@@ -55,7 +47,7 @@
 <importedID>E9E2E7FC-A516-BD7C-386F-0D5D504C3A73</importedID>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>4DF19EB6-FBD1-D574-F416-30E423D115D5</attributeRef>
+<attributeRef>D5D22535-25E8-B770-6533-422A50859F9A</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

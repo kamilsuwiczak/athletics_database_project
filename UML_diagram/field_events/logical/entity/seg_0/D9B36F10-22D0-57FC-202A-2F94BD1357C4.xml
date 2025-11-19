@@ -13,14 +13,6 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="#id_zawodów" id="E584240F-2D0D-A122-10C7-C70FEC9FDB6D">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>F41FDFA9-24A1-5EBC-355C-E1A12702C5D8</importedID>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="nazwa_zawodów" id="C815D574-CBC9-A7CB-9A87-E928394F50F8">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
@@ -51,22 +43,21 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id_stadionu" id="F1FF09BA-AB71-17F6-501C-CDC9DADCAA72">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<generatorID>BD236941-2256-F6B8-BC76-45A44E7795CD</generatorID>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>6B25A096-67DB-5E33-8990-A59328EA090B</importedID>
-<referedAttribute>4DF19EB6-FBD1-D574-F416-30E423D115D5</referedAttribute>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="kod_iso_3166-1_alfa3" id="8162838B-DF7C-5E23-DB6C-83682FB5E4A3">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:57:58 UTC</createdTime>
 <generatorID>B7A8B56A-5B90-4203-FE27-9B4E4FD8D16A</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
 <referedAttribute>813F061A-04BC-31B4-1B19-7D4F2B937942</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwa_stadionu" id="087557F8-A84A-9971-F924-230CB6F4CF64">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:30:08 UTC</createdTime>
+<generatorID>BD236941-2256-F6B8-BC76-45A44E7795CD</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>D5D22535-25E8-B770-6533-422A50859F9A</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -79,7 +70,7 @@
 <importedID>BB8E072C-E7F4-FD7C-1F86-A74AE211118C</importedID>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>E584240F-2D0D-A122-10C7-C70FEC9FDB6D</attributeRef>
+<attributeRef>C815D574-CBC9-A7CB-9A87-E928394F50F8</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

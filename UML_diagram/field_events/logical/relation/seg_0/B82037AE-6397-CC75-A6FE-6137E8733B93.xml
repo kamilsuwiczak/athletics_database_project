@@ -4,10 +4,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>FBABF2E8-67CC-8544-4921-622C1DD08E19</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <sourcePk>337D961F-FE4D-3D9F-2807-35DE277622E6</sourcePk>
 <identifying>false</identifying>
 <nameOnSource>obejmuje</nameOnSource>

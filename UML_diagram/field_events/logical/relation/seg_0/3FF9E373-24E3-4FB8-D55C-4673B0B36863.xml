@@ -4,12 +4,7 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>A78070F3-4973-E953-50B0-2D33992E316E</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <sourcePk>337D961F-FE4D-3D9F-2807-35DE277622E6</sourcePk>
-<targetPk>D66DDCCD-979B-311F-82B8-2C9C54127F54</targetPk>
 <identifying>false</identifying>
 <nameOnSource>ustanowiono w niej</nameOnSource>
 <nameOnTarget>został ustanowiony </nameOnTarget>

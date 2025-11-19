@@ -4,10 +4,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>0117CEEB-76DF-96B3-0DC3-8A7522E8C957</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <adequatelyNormalized>NO</adequatelyNormalized>
 <expectedVolumes>0</expectedVolumes>
 <fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
@@ -17,27 +13,11 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="id_rekord_zyciowego" id="B633292C-F509-9C58-F63D-281F1EFAD0FC">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>76BC49F8-A258-2A4B-5C0A-6E5B32A5230B</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="rezultat" id="DE4B406C-FFB8-35AF-029A-0D12AE16E697">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>64C83830-208D-3CD5-2E4D-29CA54B098AA</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -46,24 +26,6 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>11CA0AFC-3586-3C8A-5807-BB38C4859C40</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="id_zawodnika" id="71DBF39C-E5C9-8D9C-CB15-1DA0571A943D">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>883BBD92-ED53-8D8F-7DA0-23C73ED006AF</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -71,23 +33,51 @@
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 20:07:27 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="#id_konkurencji" id="55902EB8-C767-6E04-4E40-4C2DC265679D">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 20:37:58 UTC</createdTime>
+<Attribute name="nazwa_konkurencji" id="0A5C793E-7E60-E8F2-274E-C40DDF5921E5">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:30:33 UTC</createdTime>
 <generatorID>E49D0BE4-2D5E-8680-8709-FF49AA6B1B60</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
-<referedAttribute>8BE636EE-D879-1AA0-4298-D98E889EA3A8</referedAttribute>
+<referedAttribute>0F3C73CD-087C-F929-C17F-2650AEBA8A5D</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="imie" id="076C32B0-3E86-EA3F-AA7F-B7962F3E59BB">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:47 UTC</createdTime>
+<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>04F6D88C-06DD-F800-BC1C-F6295582F5E7</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwisko" id="68B2B7B2-8053-3963-F0B2-0F0CE15FAF1F">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:49 UTC</createdTime>
+<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>EDF62F86-0380-CE89-613F-58D0F9F5D509</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="data_urodzenia" id="4CD5E734-49C2-9BF1-796E-87518E2D14FC">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:51 UTC</createdTime>
+<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>CD999915-19D4-AE39-5F09-3A5A1D5CE35B</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="plec" id="D94A0113-D67F-63F1-5BCF-5AB5C6D05632">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:53 UTC</createdTime>
+<generatorID>B694BF39-9E78-B8B2-82D2-780B7A653F93</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>98E0E734-DAB8-7F46-ECDA-5472F9480B98</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
@@ -98,13 +88,13 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>B5149165-470D-4AD8-195C-24A9CC5444C3</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>B633292C-F509-9C58-F63D-281F1EFAD0FC</attributeRef>
+<attributeRef>076C32B0-3E86-EA3F-AA7F-B7962F3E59BB</attributeRef>
+<attributeRef>68B2B7B2-8053-3963-F0B2-0F0CE15FAF1F</attributeRef>
+<attributeRef>4CD5E734-49C2-9BF1-796E-87518E2D14FC</attributeRef>
+<attributeRef>D94A0113-D67F-63F1-5BCF-5AB5C6D05632</attributeRef>
+<attributeRef>0A5C793E-7E60-E8F2-274E-C40DDF5921E5</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

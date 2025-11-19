@@ -35,22 +35,48 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="#id_konkurencji" id="29649B25-52BC-30F2-56AF-AFBA09DEF1EC">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 20:33:20 UTC</createdTime>
+<Attribute name="nazwa_konkurencji" id="F5501D13-4218-029F-CBB4-57670FA56EFC">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:30:33 UTC</createdTime>
 <generatorID>3FF9E373-24E3-4FB8-D55C-4673B0B36863</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<referedAttribute>8BE636EE-D879-1AA0-4298-D98E889EA3A8</referedAttribute>
+<referedAttribute>0F3C73CD-087C-F929-C17F-2650AEBA8A5D</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id_zawodnika" id="917C8A34-CECE-5112-12D5-0E73F433E3DB">
+<Attribute name="imie" id="B8E321B1-D747-497F-33E0-C1A974D68733">
 <createdBy>kamil</createdBy>
-<createdTime>2025-11-12 20:01:41 UTC</createdTime>
+<createdTime>2025-11-19 14:33:47 UTC</createdTime>
 <generatorID>A5CBB368-84C8-1663-A720-5DDF8321997B</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>8529B7F6-C74F-8162-0C13-6AFEE82FB926</referedAttribute>
+<referedAttribute>04F6D88C-06DD-F800-BC1C-F6295582F5E7</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nazwisko" id="D2A4A574-3E48-B340-17D2-E531BD183211">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:49 UTC</createdTime>
+<generatorID>A5CBB368-84C8-1663-A720-5DDF8321997B</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>EDF62F86-0380-CE89-613F-58D0F9F5D509</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="data_urodzenia" id="5749CE58-0C6B-A56B-FCD3-64DFEBB13512">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:51 UTC</createdTime>
+<generatorID>A5CBB368-84C8-1663-A720-5DDF8321997B</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>CD999915-19D4-AE39-5F09-3A5A1D5CE35B</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="plec" id="E52AE430-77FF-D8D8-C491-98AAA13D32E8">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-19 14:33:53 UTC</createdTime>
+<generatorID>A5CBB368-84C8-1663-A720-5DDF8321997B</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>98E0E734-DAB8-7F46-ECDA-5472F9480B98</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>

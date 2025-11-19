@@ -4,12 +4,8 @@
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>6AE29783-8611-C8FF-DD8F-0EF750AD0313</importedID>
-<engineerTo>
-<item key="0EB5C743-306B-7241-65FD-35F6ADF9B925" value="true"/>
-<item key="150C47BC-C11B-77C3-2F05-BCA592C03B36" value="true"/>
-</engineerTo>
 <sourcePk>DB089DFB-4D28-7CDB-332A-B1A1999DBEDB</sourcePk>
-<identifying>false</identifying>
+<identifying>true</identifying>
 <nameOnSource>posiada</nameOnSource>
 <nameOnTarget>należy do</nameOnTarget>
 <optionalSource>false</optionalSource>
