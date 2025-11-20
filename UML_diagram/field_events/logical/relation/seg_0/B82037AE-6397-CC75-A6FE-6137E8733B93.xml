@@ -5,7 +5,7 @@
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>FBABF2E8-67CC-8544-4921-622C1DD08E19</importedID>
 <sourcePk>337D961F-FE4D-3D9F-2807-35DE277622E6</sourcePk>
-<identifying>false</identifying>
+<identifying>true</identifying>
 <nameOnSource>obejmuje</nameOnSource>
 <nameOnTarget>jest z uzyskiwany</nameOnTarget>
 <optionalSource>true</optionalSource>

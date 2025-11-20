@@ -5,7 +5,7 @@
 <ownerDesignName>field_events</ownerDesignName>
 <importedID>A78070F3-4973-E953-50B0-2D33992E316E</importedID>
 <sourcePk>337D961F-FE4D-3D9F-2807-35DE277622E6</sourcePk>
-<identifying>false</identifying>
+<identifying>true</identifying>
 <nameOnSource>ustanowiono w niej</nameOnSource>
 <nameOnTarget>został ustanowiony </nameOnTarget>
 <optionalSource>false</optionalSource>

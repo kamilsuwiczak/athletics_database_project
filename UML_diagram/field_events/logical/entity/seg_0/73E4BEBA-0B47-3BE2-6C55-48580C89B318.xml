@@ -54,13 +54,13 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id_reprezentanta" id="94365DE2-3538-B021-AFB3-643DE93AC23A">
+<Attribute name="adres_email" id="12249C73-90BA-8512-E8A2-3074093C7E57">
 <createdBy>kamil</createdBy>
-<createdTime>2025-11-12 19:25:17 UTC</createdTime>
+<createdTime>2025-11-20 12:40:33 UTC</createdTime>
 <generatorID>90F394A5-AF75-4955-77E0-6D76FFD67C1C</generatorID>
 <ownerDesignName>field_events</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
-<referedAttribute>09F63157-1411-DF7D-3E24-8491BB97678B</referedAttribute>
+<referedAttribute>DEA94572-0220-FD09-F7C7-F5F57701BB46</referedAttribute>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>

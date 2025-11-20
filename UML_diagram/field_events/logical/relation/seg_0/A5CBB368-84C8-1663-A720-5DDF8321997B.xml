@@ -4,7 +4,7 @@
 <createdTime>2025-11-08 20:51:49 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <targetPk>DB089DFB-4D28-7CDB-332A-B1A1999DBEDB</targetPk>
-<identifying>false</identifying>
+<identifying>true</identifying>
 <nameOnSource>Pobija</nameOnSource>
 <nameOnTarget>Jest pobity przez</nameOnTarget>
 <optionalSource>false</optionalSource>

@@ -13,14 +13,6 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="id_rekordu" id="5F536FF9-BA4F-01A3-7D19-39E73A4EA873">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>1AF7BB00-EDCE-3E91-9251-ADF8A5929B00</importedID>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="rezultat" id="EFE91DAB-0B93-DFC9-8468-77F109F52CCC">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 20:44:10 UTC</createdTime>
@@ -89,7 +81,11 @@
 <importedID>C1FB77CD-EF10-AFD8-1A33-7927A084C930</importedID>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>5F536FF9-BA4F-01A3-7D19-39E73A4EA873</attributeRef>
+<attributeRef>B8E321B1-D747-497F-33E0-C1A974D68733</attributeRef>
+<attributeRef>D2A4A574-3E48-B340-17D2-E531BD183211</attributeRef>
+<attributeRef>5749CE58-0C6B-A56B-FCD3-64DFEBB13512</attributeRef>
+<attributeRef>E52AE430-77FF-D8D8-C491-98AAA13D32E8</attributeRef>
+<attributeRef>F5501D13-4218-029F-CBB4-57670FA56EFC</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

@@ -99,6 +99,15 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="data_rozpoczęcia" id="91BDC068-6326-64E2-0B3C-7995E30EA322">
+<createdBy>kamil</createdBy>
+<createdTime>2025-11-20 12:47:24 UTC</createdTime>
+<generatorID>C23BCE02-4A00-9E2D-225E-A3C505A3E2E0</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>92AAB2C3-AD0C-DC4B-041A-49FC957C8137</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="49EC8CC6-4B06-E0AB-4DDD-AC8B802D5577" name="Wynik PK">
@@ -109,10 +118,12 @@
 <pk>true</pk>
 <usedAttributes>
 <attributeRef>21D3D3BF-C4B0-7D01-12AF-ADA6708E41FA</attributeRef>
+<attributeRef>91BDC068-6326-64E2-0B3C-7995E30EA322</attributeRef>
 <attributeRef>0FC728F7-5E49-B737-72AC-AA345605DEDD</attributeRef>
 <attributeRef>1375DB67-F911-CFE4-5C99-36EF1AF7A4B4</attributeRef>
 <attributeRef>B417E9AC-D650-2DAE-FCE2-E2B409D0C97E</attributeRef>
 <attributeRef>B839F342-B657-E887-6016-3A1042DDF8CF</attributeRef>
+<attributeRef>3E97B9C1-7A69-BDEA-0097-802AF76D69C8</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

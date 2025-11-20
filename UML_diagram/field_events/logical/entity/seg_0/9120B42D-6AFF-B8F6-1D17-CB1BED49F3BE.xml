@@ -12,9 +12,9 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="id_trenera" id="6C5582BE-DB43-8A9A-7578-15FD64FA07EE">
+<Attribute name="adres_email" id="0FDF3757-3111-1F85-DF0C-0C28C605FE29">
 <createdBy>kamil</createdBy>
-<createdTime>2025-11-12 19:36:25 UTC</createdTime>
+<createdTime>2025-11-12 19:37:12 UTC</createdTime>
 <ownerDesignName>field_events</ownerDesignName>
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
@@ -33,14 +33,6 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="adres_email" id="0FDF3757-3111-1F85-DF0C-0C28C605FE29">
-<createdBy>kamil</createdBy>
-<createdTime>2025-11-12 19:37:12 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="BE91BAE4-CA99-9829-A8BC-6E25B7D39303" name="Trener PK">
@@ -49,7 +41,7 @@
 <ownerDesignName>field_events</ownerDesignName>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>6C5582BE-DB43-8A9A-7578-15FD64FA07EE</attributeRef>
+<attributeRef>0FDF3757-3111-1F85-DF0C-0C28C605FE29</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>
