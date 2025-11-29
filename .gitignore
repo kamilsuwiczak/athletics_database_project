@@ -3,3 +3,4 @@
 **/*.git
 **/*.DS_Store
 UML_diagram/
+pgdata/
