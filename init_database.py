@@ -5,6 +5,7 @@ def create_database(cursor, creation_file_path='schema.sql', data_file_path='exa
         sql_script = f.read()
         cursor.execute(sql_script)
 
+def load_data(cursor, data_file_path='example_data.sql'):
     with open(data_file_path, 'r') as f:
         sql_script = f.read()
         cursor.execute(sql_script)
@@ -17,8 +18,9 @@ if __name__ == '__main__':
         host='localhost',
         port='5432') as conn:
         cursor = conn.cursor()
-        create_database(cursor)
-        cursor.execute("SELECT * FROM Zawodnicy LEFT JOIN Plcie ON Zawodnicy.id_plci = Plcie.id_plci LEFT JOIN Reprezentanci_zawodnikow ON Zawodnicy.id_reprezentanta = Reprezentanci_zawodnikow.id_reprezentanta;")
+        # create_database(cursor)
+        # load_data(cursor)
+        cursor.execute("SELECT * from wyniki LEFT JOIN statusy_wynikow ON wyniki.id_statusu = statusy_wynikow.id_statusu LEFT JOIN Zawodnicy ON wyniki.id_zawodnika = Zawodnicy.id_zawodnika;")
         rows = cursor.fetchall()
         for row in rows:
             print(row)

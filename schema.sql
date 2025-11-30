@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS Rekordy_zyciowe CASCADE;
 DROP TABLE IF EXISTS Stadiony CASCADE;
 DROP TABLE IF EXISTS Zawody CASCADE;
 DROP TABLE IF EXISTS Wyniki CASCADE;
+DROP TABLE IF EXISTS Statusy_wynikow CASCADE;
 
 CREATE TABLE Plcie(
     id_plci SERIAL PRIMARY KEY,
@@ -23,6 +24,7 @@ CREATE TABLE Reprezentanci_zawodnikow(
     nazwisko VARCHAR(100) NOT NULL,
     adres_email VARCHAR(100) NOT NULL
     );
+
 
 CREATE TABLE Konkurencje(
     id_konkurencji SERIAL PRIMARY KEY,
@@ -51,16 +53,20 @@ CREATE TABLE Zawodnicy(
     data_urodzenia DATE,
     id_plci INT REFERENCES Plcie(id_plci) NOT NULL,
     id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
-    id_reprezentanta INT REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) NULL
+    id_reprezentanta INT REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) NULL,
+    CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE)
     );
 
 CREATE TABLE Rekordy_zyciowe(
     id_rekordu_zyciowego SERIAL PRIMARY KEY,
     id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
     id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
-    rezultat VARCHAR(20) NOT NULL,
-    data_ustanowienia DATE NOT NULL,
-    wynik_punktowy NUMERIC(10,2) NOT NULL
+    rezultat NUMERIC(10,2) NOT NULL,
+    data_rezultatu DATE NOT NULL,
+    wynik_punktowy INT NOT NULL,
+    CONSTRAINT wynik_punktowy_check CHECK (wynik_punktowy >= 0),
+    CONSTRAINT rezultat_check CHECK (rezultat >= 0),
+    CONSTRAINT data_rezultatu_check CHECK (data_rezultatu <= CURRENT_DATE)
     );
 
 CREATE TABLE Trenerzy_zawodnicy(
@@ -72,14 +78,16 @@ CREATE TABLE Trenerzy_zawodnicy(
 CREATE TABLE Rekordy_swiata(
     id_rekordu SERIAL PRIMARY KEY,
     id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
-    rezultat VARCHAR(20) NOT NULL,
-    data_ustanowienia DATE NOT NULL,
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NULL
+    rezultat NUMERIC(10,2) NOT NULL,
+    data_rezultatu DATE NOT NULL,
+    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
+    CONSTRAINT rezultat_rekord_swiata_check CHECK (rezultat >= 0)
     );
 
 CREATE TABLE Stadiony(
     id_stadiony SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
+    miasto VARCHAR(100) NOT NULL,
     id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL
 );
 
@@ -89,16 +97,26 @@ CREATE TABLE Zawody(
     data_rozpoczecia DATE NOT NULL,
     data_zakonczenia DATE NOT NULL,
     id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
-    id_stadiony INT REFERENCES Stadiony(id_stadiony) NULL
+    id_stadiony INT REFERENCES Stadiony(id_stadiony) NOT NULL,
+    CONSTRAINT data_rozpoczecia_check CHECK (data_rozpoczecia <= CURRENT_DATE),
+    CONSTRAINT data_zakonczenia_check CHECK (data_zakonczenia >= data_rozpoczecia)
     );
+
+CREATE TABLE Statusy_wynikow(
+    id_statusu SERIAL PRIMARY KEY,
+    status_wyniku VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE Wyniki(
     id_wyniku SERIAL PRIMARY KEY,
     id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
     id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
     id_zawody INT REFERENCES Zawody(id_zawody) NOT NULL,
-    rezultat VARCHAR(20) NOT NULL,
-    miejsce INT NOT NULL,
-    status_wyniku VARCHAR(50) NOT NULL,
-    data_rezultatu DATE NOT NULL
+    id_statusu INT REFERENCES Statusy_wynikow(id_statusu) NOT NULL,
+    rezultat NUMERIC(10,2) NULL,
+    miejsce INT NULL,
+    data_rezultatu DATE NOT NULL,
+    CONSTRAINT miejsce_check CHECK (miejsce > 0),
+    CONSTRAINT rezultat_check_wyniki CHECK (rezultat >= 0),
+    CONSTRAINT data_rezultatu_check_wyniki CHECK (data_rezultatu <= CURRENT_DATE)
 );
