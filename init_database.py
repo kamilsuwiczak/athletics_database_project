@@ -21,7 +21,7 @@ if __name__ == '__main__':
         cursor = conn.cursor()
         create_database(cursor)
         load_data(cursor)
-        cursor.execute("SELECT * from wyniki LEFT JOIN statusy_wynikow ON wyniki.id_statusu = statusy_wynikow.id_statusu LEFT JOIN Zawodnicy ON wyniki.id_zawodnika = Zawodnicy.id_zawodnika;")
+        cursor.execute("SELECT * FROM Panstwa;")
         rows = cursor.fetchall()
         for row in rows:
             print(row)
