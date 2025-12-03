@@ -15,13 +15,15 @@ CREATE TABLE Reprezentanci_zawodnikow(
     id_reprezentanta SERIAL PRIMARY KEY,
     imie VARCHAR(100) NOT NULL,
     nazwisko VARCHAR(100) NOT NULL,
-    adres_email VARCHAR(100) NOT NULL
+    adres_email VARCHAR(100) NOT NULL,
+    UNIQUE (adres_email)
     );
 
 
 CREATE TABLE Konkurencje(
     id_konkurencji SERIAL PRIMARY KEY,
-    nazwa VARCHAR(100) NOT NULL
+    nazwa VARCHAR(100) NOT NULL,
+    UNIQUE (nazwa)
     );
 
 CREATE TABLE Panstwa(
@@ -29,14 +31,16 @@ CREATE TABLE Panstwa(
     nazwa VARCHAR(100) NOT NULL,
     kod_iso CHAR(3) NOT NULL,
     kontynent VARCHAR(50) NULL,
-    stolica VARCHAR(100) NULL
+    stolica VARCHAR(100) NULL,
+    UNIQUE (kod_iso)
     );
 
 CREATE TABLE Trenerzy(
     id_trenera SERIAL PRIMARY KEY,
     imie VARCHAR(50) NOT NULL,
     nazwisko VARCHAR(50) NOT NULL,
-    adres_email VARCHAR(100) NOT NULL
+    adres_email VARCHAR(100) NOT NULL,
+    UNIQUE (adres_email)
     );
 
 CREATE TABLE Zawodnicy(
@@ -64,9 +68,9 @@ CREATE TABLE Rekordy_zyciowe(
     );
 
 CREATE TABLE Trenerzy_zawodnicy(
-    id_trenera_zawodnicy SERIAL PRIMARY KEY,
     id_trenera INT REFERENCES Trenerzy(id_trenera) NOT NULL,
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL
+    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
+    PRIMARY KEY (id_trenera, id_zawodnika)
     );
 
 CREATE TABLE Rekordy_swiata(
@@ -82,7 +86,8 @@ CREATE TABLE Stadiony(
     id_stadiony SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
     miasto VARCHAR(100) NOT NULL,
-    id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL
+    id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
+    UNIQUE (nazwa)
 );
 
 CREATE TABLE Zawody(
@@ -93,7 +98,8 @@ CREATE TABLE Zawody(
     id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
     id_stadiony INT REFERENCES Stadiony(id_stadiony) NOT NULL,
     CONSTRAINT data_rozpoczecia_check CHECK (data_rozpoczecia <= CURRENT_DATE),
-    CONSTRAINT data_zakonczenia_check CHECK (data_zakonczenia >= data_rozpoczecia)
+    CONSTRAINT data_zakonczenia_check CHECK (data_zakonczenia >= data_rozpoczecia),
+    UNIQUE (nazwa, data_rozpoczecia)
     );
 
 CREATE TABLE Statusy_wynikow(
