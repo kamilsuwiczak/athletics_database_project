@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS Zawodnicy CASCADE; 
-DROP TABLE IF EXISTS Plcie CASCADE;
 DROP TABLE IF EXISTS Konkurencje CASCADE;
 DROP TABLE IF EXISTS Reprezentanci_zawodnikow CASCADE;
 DROP TABLE IF EXISTS Panstwa CASCADE;
@@ -11,12 +10,6 @@ DROP TABLE IF EXISTS Stadiony CASCADE;
 DROP TABLE IF EXISTS Zawody CASCADE;
 DROP TABLE IF EXISTS Wyniki CASCADE;
 DROP TABLE IF EXISTS Statusy_wynikow CASCADE;
-
-CREATE TABLE Plcie(
-    id_plci SERIAL PRIMARY KEY,
-    plec VARCHAR(10) NOT NULL,
-    plec_skrot CHAR(1) NOT NULL
-    );
 
 CREATE TABLE Reprezentanci_zawodnikow(
     id_reprezentanta SERIAL PRIMARY KEY,
@@ -51,10 +44,11 @@ CREATE TABLE Zawodnicy(
     imie VARCHAR(50) NOT NULL,
     nazwisko VARCHAR(50) NOT NULL,
     data_urodzenia DATE,
-    id_plci INT REFERENCES Plcie(id_plci) NOT NULL,
+    plec VARCHAR(1) NOT NULL,
     id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
     id_reprezentanta INT REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) NULL,
-    CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE)
+    CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE),
+    CONSTRAINT plec_check CHECK (plec IN ('K', 'M'))
     );
 
 CREATE TABLE Rekordy_zyciowe(

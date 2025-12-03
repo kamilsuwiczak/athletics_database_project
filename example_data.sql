@@ -1,7 +1,3 @@
-INSERT INTO Plcie (plec, plec_skrot) VALUES
-('Mezczyzna', 'M'),
-('Kobieta', 'K');
-
 INSERT INTO Reprezentanci_zawodnikow (imie, nazwisko, adres_email) VALUES
 ('Marek', 'Zielinski', 'marek.zielinski@example.com'),
 ('Ewa', 'Kowalczyk', 'ewa.kowalczyk@example.com'),
@@ -29,13 +25,13 @@ INSERT INTO Trenerzy (imie, nazwisko, adres_email) VALUES
 ('Beata', 'Wojcik', 'beata.wojcik@example.com'),
 ('Cezary', 'Kaczmarek', 'cezary.kaczmarek@example.com');
 
-INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, id_plci, id_panstwa,id_reprezentanta) VALUES
-('Jan', 'Kowalski', '1990-05-15', 1, 2, 1),
-('Anna', 'Nowak', '1988-11-23', 2, 2, 2),
-('Piotr', 'Wozniak', '1995-07-30', 1, 1, 1),
-('Katarzyna', 'Lewandowska', '1992-03-12', 2, 2, NULL),
-('Michał', 'Szymanski', '1985-09-05', 1, 7, 3),
-('Magdalena', 'Krol', '1993-12-19', 2, 6, NULL);
+INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, plec, id_panstwa,id_reprezentanta) VALUES
+('Jan', 'Kowalski', '1990-05-15', 'M', 2, 1),
+('Anna', 'Nowak', '1988-11-23', 'K', 2, 2),
+('Piotr', 'Wozniak', '1995-07-30', 'M', 1, 1),
+('Katarzyna', 'Lewandowska', '1992-03-12', 'K', 2, NULL),
+('Michał', 'Szymanski', '1985-09-05', 'M', 7, 3),
+('Magdalena', 'Krol', '1993-12-19', 'K', 6, NULL);
 
 INSERT INTO Rekordy_zyciowe (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy) VALUES
 (1, 3, 56.78, '2021-06-15', 850),
