@@ -4,12 +4,12 @@ INSERT INTO Reprezentanci_zawodnikow (imie, nazwisko, adres_email) VALUES
 ('Tomasz', 'Wroblewski', 'tomasz.wroblewski@example.com'),
 ('Agnieszka', 'Mazur', 'agnieszka.mazur@example.com');
 
-INSERT INTO Konkurencje (nazwa) VALUES
-('Skok w dal'),
-('Rzut oszczepem'),
-('Rzut dyskiem'),
-('Skok wzwyz'),
-('Pchnięcie kulą');
+INSERT INTO Konkurencje (nazwa, rodzaj) VALUES
+('Skok w dal', 'skok'),
+('Rzut oszczepem', 'rzut'),
+('Rzut dyskiem', 'rzut'),
+('Skok wzwyz', 'skok'),
+('Pchnięcie kulą', 'rzut');
 
 INSERT INTO Panstwa (nazwa, kod_iso, kontynent, stolica) VALUES
 ('Polska', 'POL', 'Europa', 'Warszawa'),
@@ -60,11 +60,18 @@ INSERT INTO Stadiony (nazwa, miasto,id_panstwa) VALUES
 ('Tokyo National Stadium', 'Tokio', 4),
 ('Maracana Stadium', 'Rio de Janeiro', 5);
 
-INSERT INTO Zawody (nazwa, data_rozpoczecia, data_zakonczenia, id_panstwa, id_stadiony) VALUES
-('Mistrzostwa Europy 2022', '2022-08-10', '2022-08-20', 2, 2),
-('Igrzyska Olimpijskie 2023', '2023-07-15', '2023-07-30', 4, 4),
-('Mistrzostwa Swiata 2021', '2021-09-01', '2021-09-15', 3, 3),
-('Grand Prix 2022', '2022-05-05', '2022-05-10', 6, 3);
+INSERT INTO Typy_zawodow (nazwa_typu) VALUES
+('Mistrzostwa Europy'),
+('Igrzyska Olimpijskie'),
+('Mistrzostwa Swiata'),
+('Grand Prix');
+
+INSERT INTO Zawody (nazwa, id_typu_zawodow, data_rozpoczecia, data_zakonczenia, id_panstwa, id_stadionu) VALUES
+('Mistrzostwa Europy 2022', 1, '2022-08-10', '2022-08-20', 2, 2),
+('Igrzyska Olimpijskie 2023', 2, '2023-07-15', '2023-07-30', 4, 4),
+('Mistrzostwa Swiata 2021', 3, '2021-09-01', '2021-09-15', 3, 3),
+('Grand Prix 2022', 4, '2022-05-05', '2022-05-10', 6, 3),
+('Mistrzostwa Europy 2023', 1, '2023-06-10', '2023-06-15', 1, 1);
 
 INSERT INTO Statusy_wynikow (status_wyniku) VALUES
 ('zakwalifikowany'),
@@ -73,7 +80,9 @@ INSERT INTO Statusy_wynikow (status_wyniku) VALUES
 ('nieukończony');
 
 INSERT INTO Wyniki (id_zawodnika, id_konkurencji, id_zawody, rezultat, miejsce, id_statusu, data_rezultatu) VALUES
-(1, 3, 1, 57.12, 2, 1, '2022-08-15'),
+(1, 1, 1, 57.12, 2, 1, '2022-08-15'),
+(1, 1, 5, 58.62, 2, 1, '2023-08-15'),
+(2, 3, 1, 55.89, 4, 2, '2022-08-16'),
 (2, 1, 1, 6.50, 1, 1, '2022-08-16'),
 (3, 2, 2, 76.00, 3, 2, '2023-07-20'),
 (4, 4, 2, NULL, NULL, 3, '2023-07-22'),

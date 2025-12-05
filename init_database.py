@@ -9,7 +9,7 @@ def load_data(cursor, data_file_path='example_data.sql'):
     with open(data_file_path, 'r', encoding='utf-8') as f:
         sql_script = f.read()
         cursor.execute(sql_script)
-        
+
 if __name__ == '__main__':
     with psycopg2.connect(
         dbname='athletics_db',
@@ -25,3 +25,11 @@ if __name__ == '__main__':
         rows = cursor.fetchall()
         for row in rows:
             print(row)
+        print("-----")
+        cursor.execute("CALL dodaj_zawodnika(%s, %s, %s, %s, %s, %s);", ('Kacper', 'Kowalski', '1991-05-15', 'M', 'POL', None))
+        print("-------")
+
+        cursor.execute("SELECT zlicz_medale_w_typie_zawodow(%s,%s);", (1, 'Mistrzostwa Europy'))
+        medale_result = cursor.fetchone()
+        print("medale:", medale_result)
+
