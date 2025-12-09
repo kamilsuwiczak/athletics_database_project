@@ -61,6 +61,15 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="Nazwa" id="8BCBE027-F8AF-8585-1447-07F980ED1166">
+<createdBy>kamil</createdBy>
+<createdTime>2025-12-09 09:30:02 UTC</createdTime>
+<generatorID>5DE37DE7-019D-F436-E672-C5518DB1DB8F</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>4D6488AE-9EE2-3430-BFA8-E5896AC0ABDA</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="C140AACD-D85C-D9F2-18E3-04D81410C973" name="Zawody PK">

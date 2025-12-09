@@ -108,6 +108,15 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="Nazwa" id="56F1C3F3-EA30-4A3B-5C11-C6426C7A09B5">
+<createdBy>kamil</createdBy>
+<createdTime>2025-12-09 09:33:31 UTC</createdTime>
+<generatorID>4F7AA80E-73FA-846A-8D8A-97918C63E5ED</generatorID>
+<ownerDesignName>field_events</ownerDesignName>
+<referedAttribute>C3C00730-EC78-1FF4-890C-00E70917EE47</referedAttribute>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="49EC8CC6-4B06-E0AB-4DDD-AC8B802D5577" name="Wynik PK">
