@@ -21,14 +21,6 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="rodzaj_zawodow" id="0EA7541E-FE8D-C5E1-6421-65A3B4B7FFE3">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>DA9C7245-A433-4FC9-2AE9-B1A986761ABA</importedID>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="data_rozpoczęcia" id="92AAB2C3-AD0C-DC4B-041A-49FC957C8137">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 20:05:10 UTC</createdTime>

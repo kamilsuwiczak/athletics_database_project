@@ -29,14 +29,6 @@
 <use>0</use>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="status" id="DFE08A20-A512-6FC0-3B64-ABF26A9F0A18">
-<createdBy>marci</createdBy>
-<createdTime>2025-11-08 19:32:30 UTC</createdTime>
-<ownerDesignName>field_events</ownerDesignName>
-<importedID>EAF61116-DDC6-2E9C-E944-16798DF6AF46</importedID>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="data_rezultatu" id="69D68D6B-12C4-4C42-5C0A-092D1CFD0546">
 <createdBy>marci</createdBy>
 <createdTime>2025-11-08 19:32:30 UTC</createdTime>
