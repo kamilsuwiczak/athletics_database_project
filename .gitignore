@@ -5,3 +5,6 @@
 UML_diagram/
 pgdata/
 .idea/
+athletics_project/athletics_project/__pycache__/
+athletics_project/core/__pycache__/
+athletics_project/core/migrations/__pycache__/
