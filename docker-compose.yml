@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:18
+    image: postgres:17
     container_name: postgres_db
     environment:
       POSTGRES_USER: myuser
@@ -9,4 +9,20 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./pgdata:/var/lib/postgresql
+      - ./pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/example_data.sql:/docker-entrypoint-initdb.d/02_data.sql
+
+  app:
+    image: python:3.11-slim
+    container_name: streamlit_app
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    ports:
+      - "8501:8501"
+    command: >
+      sh -c "pip install -r requirements.txt &&
+             streamlit run app.py --server.address=0.0.0.0"
+    depends_on:
+      - db
