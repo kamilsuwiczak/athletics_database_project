@@ -5,3 +5,4 @@
 UML_diagram/
 pgdata/
 .idea/
+__pycache__/

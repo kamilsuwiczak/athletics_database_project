@@ -15,20 +15,21 @@ def get_athletes():
     conn = get_connection()
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute("""
-            SELECT z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+            SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
                    z.data_urodzenia AS "Data urodzenia", 
                    z.plec AS "Płeć", p.nazwa AS "Kraj"
             FROM Zawodnicy z 
             JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
             ORDER BY z.id_zawodnika DESC
         """)
+
         return cur.fetchall()
 
 def get_athletes_filtered(search_term):
     conn = get_connection()
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         query = """
-            SELECT z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+            SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
                    z.data_urodzenia AS "Data urodzenia", 
                    z.plec AS "Płeć", p.nazwa AS "Kraj"
             FROM Zawodnicy z 
