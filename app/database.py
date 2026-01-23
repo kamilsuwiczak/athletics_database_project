@@ -2,63 +2,95 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-@st.cache_resource
+# @st.cache_resource
 def get_connection():
-    return psycopg2.connect(
-        host="db", 
-        database="athletics_db",
-        user="myuser",
-        password="mypassword"
-    )
+    """returns a connection to database"""
+    try:
+        conn = psycopg2.connect(
+            # host="db", 
+            database="athletics_db",
+            user="myuser",
+            password="mypassword"
+        )
+        return conn
+    except Exception as e:
+        st.error(f"Błąd połączenia z bazą danych: {e}")
+        return None
 
-def get_athletes():
-    conn = get_connection()
-    with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        cur.execute("""
-            SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
-                   z.data_urodzenia AS "Data urodzenia", 
-                   z.plec AS "Płeć", p.nazwa AS "Kraj"
-            FROM Zawodnicy z 
-            JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
-            ORDER BY z.id_zawodnika DESC
-        """)
 
-        return cur.fetchall()
+# Athletes
+def get_athletes(filter_by=None, search_term=None):
+    """returns id_zawodnika, imie, nazwisko, data_urodzenia, plec, kraj
+        options to filter: name_surname - filtering by name or surname
+        gender - plec
+    """
+    with get_connection() as conn: 
+        with conn.cursor() as cur:
+            if filter_by == None:
+                cur.execute("""
+                    SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+                        z.data_urodzenia AS "Data urodzenia", 
+                        z.plec AS "Płeć", p.nazwa AS "Kraj"
+                    FROM Zawodnicy z 
+                    JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
+                    ORDER BY z.id_zawodnika DESC
+                """)
 
-def get_athletes_filtered(search_term):
-    conn = get_connection()
-    with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        query = """
-            SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
-                   z.data_urodzenia AS "Data urodzenia", 
-                   z.plec AS "Płeć", p.nazwa AS "Kraj"
-            FROM Zawodnicy z 
-            JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
-            WHERE z.nazwisko ILIKE %s OR z.imie ILIKE %s
-            ORDER BY z.nazwisko ASC
-        """
-        param = f"%{search_term}%"
-        cur.execute(query, (param, param))
-        return cur.fetchall()
+            elif filter_by == 'name_surname':
+                query = """
+                SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+                    z.data_urodzenia AS "Data urodzenia", 
+                    z.plec AS "Płeć", p.nazwa AS "Kraj"
+                FROM Zawodnicy z 
+                JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
+                WHERE z.nazwisko ILIKE %s OR z.imie ILIKE %s
+                ORDER BY z.nazwisko ASC
+                """
+                param = f"%{search_term}%"
+                cur.execute(query, (param, param))
 
-def get_countries():
-    conn = get_connection()
-    with conn.cursor() as cur:
-        cur.execute("SELECT nazwa, kod_iso FROM Panstwa ORDER BY nazwa ASC")
-        return cur.fetchall()
+            elif filter_by == 'gender':
+                query = """
+                SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+                    z.data_urodzenia AS "Data urodzenia", 
+                    z.plec AS "Płeć", p.nazwa AS "Kraj"
+                FROM Zawodnicy z 
+                JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
+                WHERE z.plec ILIKE %s
+                ORDER BY z.nazwisko ASC
+                """
+                param = f"%{search_term}%"
+                cur.execute(query, (param,))
+            
+            elif filter_by == 'country':
+                query = """
+                SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+                    z.data_urodzenia AS "Data urodzenia", 
+                    z.plec AS "Płeć", p.nazwa AS "Kraj"
+                FROM Zawodnicy z 
+                JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
+                WHERE p.nazwa ILIKE %s
+                ORDER BY z.nazwisko ASC
+                """
+                param = f"%{search_term}%"
+                cur.execute(query, (param,))
+
+            return cur.fetchall()
+
 
 def add_athlete(imie, nazwisko, data_ur, plec, kod_iso):
-    conn = get_connection()
-    try:
-        with conn.cursor() as cur:
-            cur.execute("CALL dodaj_zawodnika(%s, %s, %s, %s, %s)", 
-                       (imie, nazwisko, data_ur, plec, kod_iso))
-            conn.commit()
-            return True, None
-    except Exception as e:
-        conn.rollback()
-        error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-        return False, error_msg
+    with get_connection() as conn: 
+        conn = get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("CALL dodaj_zawodnika(%s, %s, %s, %s, %s)", 
+                        (imie, nazwisko, data_ur, plec, kod_iso))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
     
 def delete_athletes(ids_to_delete):
     conn = get_connection()
@@ -70,3 +102,36 @@ def delete_athletes(ids_to_delete):
     except Exception as e:
         conn.rollback()
         return False, str(e)
+    
+
+# Countries
+def get_countries():
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT nazwa, kod_iso FROM Panstwa ORDER BY nazwa ASC")
+            return cur.fetchall()
+
+def add_country():
+    pass
+
+def delete_countries():
+    pass
+
+
+#Coaches
+def get_coaches():
+    pass
+
+def add_coach():
+    pass
+
+def delete_coaches():
+    pass
+
+#Personal 
+
+
+
+
+
+
