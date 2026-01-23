@@ -333,3 +333,81 @@ def delete_venues(ids_to_delete):
             return False, str(e)
 
 
+# Results statuses
+def get_result_statuses(filter_by=None, search_term=None):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            if filter_by == 'name':
+                query = """
+                SELECT id_statusu, status_wyniku
+                FROM Statusy_wynikow
+                WHERE status_wyniku ILIKE %s
+                ORDER BY status_wyniku ASC
+                """
+                param = f"%{search_term}%"
+                cur.execute(query, (param,))
+            else:
+                cur.execute("SELECT id_statusu, status_wyniku FROM Statusy_wynikow ORDER BY status_wyniku ASC")
+            return cur.fetchall()
+
+def add_result_status(status_wyniku):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO Statusy_wynikow (status_wyniku) VALUES (%s)", (status_wyniku,))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
+
+def delete_result_statuses(ids_to_delete):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM Statusy_wynikow WHERE id_statusu = ANY(%s)", (ids_to_delete,))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
+        
+
+# types of tournaments
+def get_tournament_types(filter_by=None, search_term=None):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            if filter_by == 'name':
+                query = """
+                SELECT id_typu_zawodow, nazwa_typu
+                FROM Typy_zawodow
+                WHERE nazwa_typu ILIKE %s
+                ORDER BY nazwa_typu ASC
+                """
+                param = f"%{search_term}%"
+                cur.execute(query, (param,))
+            else:
+                cur.execute("SELECT id_typu_zawodow, nazwa_typu FROM Typy_zawodow ORDER BY nazwa_typu ASC")
+            return cur.fetchall()
+        
+def add_tournament_type(nazwa_typu):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO Typy_zawodow (nazwa_typu) VALUES (%s)", (nazwa_typu,))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
+
+def delete_tournament_types(ids_to_delete):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM Typy_zawodow WHERE id_typu_zawodow = ANY(%s)", (ids_to_delete,))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
