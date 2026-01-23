@@ -91,17 +91,33 @@ def add_athlete(imie, nazwisko, data_ur, plec, kod_iso):
             conn.rollback()
             error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
             return False, error_msg
+
+def update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Zawodnicy 
+                    SET imie = %s, nazwisko = %s, data_urodzenia = %s, plec = %s, id_panstwa = %s, id_reprezentanta = %s
+                    WHERE id_zawodnika = %s
+                """, (imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta, id_zawodnika))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
     
 def delete_athletes(ids_to_delete):
-    conn = get_connection()
-    try:
-        with conn.cursor() as cur:
-            cur.execute("DELETE FROM Zawodnicy WHERE id_zawodnika = ANY(%s)", (ids_to_delete,))
-            conn.commit()
-            return True, None
-    except Exception as e:
-        conn.rollback()
-        return False, str(e)
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM Zawodnicy WHERE id_zawodnika = ANY(%s)", (ids_to_delete,))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
     
 
 # Countries
@@ -110,6 +126,18 @@ def get_countries():
         with conn.cursor() as cur:
             cur.execute("SELECT nazwa, kod_iso FROM Panstwa ORDER BY nazwa ASC")
             return cur.fetchall()
+
+def update_coutry(id_panstwa, new_name, new_iso_code):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE Panstwa SET nazwa = %s, kod_iso = %s WHERE id_panstwa = %s", 
+                        (new_name, new_iso_code, id_panstwa))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            return False, str(e)
 
 def add_country(name, iso_code):
     with get_connection() as conn:
@@ -177,7 +205,22 @@ def delete_coaches(ids_to_delete):
         except Exception as e:
             conn.rollback()
             return False, str(e)
-    
+
+def update_coach(id_trenera, imie, nazwisko, adres_email):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Trenerzy 
+                    SET imie = %s, nazwisko = %s, adres_email = %s
+                    WHERE id_trenera = %s
+                """, (imie, nazwisko, adres_email, id_trenera))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
 
 #Personal best 
 def get_personal_bests(filter_by=None, search_term=None):
@@ -231,6 +274,22 @@ def delete_personal_bests(ids_to_delete):
             conn.rollback()
             return False, str(e)
 
+def update_personal_best(id_rekordu, id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Rekordy_zyciowe 
+                    SET id_zawodnika = %s, id_konkurencji = %s, rezultat = %s, data_rezultatu = %s, wynik_punktowy = %s
+                    WHERE id_rekordu = %s
+                """, (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy, id_rekordu))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
+
 # Competitions
 def get_competitions(filter_by=None, search_term=None):
     with get_connection() as conn:
@@ -269,6 +328,22 @@ def delete_competitions(ids_to_delete):
         except Exception as e:
             conn.rollback()
             return False, str(e)
+
+def update_competition(id_konkurencji, nazwa, rodzaj):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Konkurencje 
+                    SET nazwa = %s, rodzaj = %s
+                    WHERE id_konkurencji = %s
+                """, (nazwa, rodzaj, id_konkurencji))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
 
 # Venues
 def get_venues(filter_by=None, search_term=None):
@@ -332,6 +407,22 @@ def delete_venues(ids_to_delete):
             conn.rollback()
             return False, str(e)
 
+def update_venue(id_stadionu, nazwa, miasto, id_panstwa):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Stadiony 
+                    SET nazwa = %s, miasto = %s, id_panstwa = (SELECT id_panstwa FROM Panstwa WHERE id_panstwa = %s)
+                    WHERE id_stadionu = %s
+                """, (nazwa, miasto, id_panstwa, id_stadionu))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
+
 
 # Results statuses
 def get_result_statuses(filter_by=None, search_term=None):
@@ -371,6 +462,22 @@ def delete_result_statuses(ids_to_delete):
         except Exception as e:
             conn.rollback()
             return False, str(e)
+
+def update_result_status(id_statusu, status_wyniku):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Statusy_wynikow 
+                    SET status_wyniku = %s
+                    WHERE id_statusu = %s
+                """, (status_wyniku, id_statusu))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
         
 
 # types of tournaments
@@ -411,3 +518,19 @@ def delete_tournament_types(ids_to_delete):
         except Exception as e:
             conn.rollback()
             return False, str(e)
+
+def update_tournament_type(id_typu_zawodow, nazwa_typu):
+    with get_connection() as conn:
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE Typy_zawodow 
+                    SET nazwa_typu = %s
+                    WHERE id_typu_zawodow = %s
+                """, (nazwa_typu, id_typu_zawodow))
+                conn.commit()
+                return True, None
+        except Exception as e:
+            conn.rollback()
+            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+            return False, error_msg
