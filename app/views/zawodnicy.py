@@ -1,11 +1,14 @@
 import streamlit as st
-import database as db
+#import database as db
 import datetime
 import pandas as pd
 
+import database_mgm_func.athletes as athletes_db
+import database_mgm_func.countries as countries_db
+
 @st.dialog("Dodaj nowego zawodnika")
 def modal_dodaj_zawodnika():
-    lista_panstw = db.get_countries()
+    lista_panstw = countries_db.get_countries()
     opcje_panstw = {nazwa: kod for nazwa, kod in lista_panstw}
     
     with st.form("form_dodaj_modal"):
@@ -20,7 +23,7 @@ def modal_dodaj_zawodnika():
                 st.error("Imię i nazwisko nie mogą być puste.")
                 return
             kod_iso = opcje_panstw[panstwo_nazwa]
-            success, error = db.add_athlete(imie, nazwisko, data_ur, plec, kod_iso)
+            success, error = athletes_db.add_athlete(imie, nazwisko, data_ur, plec, kod_iso)
             
             if success:
                 st.success("Dodano!")
@@ -40,9 +43,9 @@ with col2:
     search_query = st.text_input("", placeholder="Szukaj zawodnika po nazwisku...", label_visibility="collapsed")
 
 if search_query:
-    data = db.get_athletes("name_surname", search_query)
+    data = athletes_db.get_athletes("name_surname", search_query)
 else:
-    data = db.get_athletes()
+    data = athletes_db.get_athletes()
 
 df = pd.DataFrame(data)
 
@@ -66,7 +69,7 @@ if not df.empty:
         
         if st.button("Usuń zaznaczonych", type="secondary"):
             
-            success, error = db.delete_athletes(ids_to_delete)
+            success, error = athletes_db.delete_athletes(ids_to_delete)
             if success:
                 st.success("Usunięto pomyślnie!")
                 st.rerun()
