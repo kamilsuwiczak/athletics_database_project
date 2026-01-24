@@ -9,7 +9,7 @@ def get_athletes(filter_by=None, search_term=None):
         gender - plec
     """
     with get_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
             if filter_by == None:
                 cur.execute("""
                     SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
@@ -22,7 +22,7 @@ def get_athletes(filter_by=None, search_term=None):
 
             elif filter_by == 'name_surname':
                 query = """
-                SELECT z.id_zawodnika, z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
+                SELECT z.id_zawodnika AS "ID Zawodnika", z.imie AS "Imię", z.nazwisko AS "Nazwisko", 
                     z.data_urodzenia AS "Data urodzenia", 
                     z.plec AS "Płeć", p.nazwa AS "Kraj"
                 FROM Zawodnicy z 
