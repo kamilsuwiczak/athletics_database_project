@@ -1,5 +1,4 @@
 import streamlit as st
-#import database as db
 import datetime
 import pandas as pd
 
@@ -8,21 +7,23 @@ import database_mgm_func.countries as countries_db
 
 @st.dialog("Dodaj nowego zawodnika")
 def modal_dodaj_zawodnika():
+
     lista_panstw = countries_db.get_countries()
-    opcje_panstw = {nazwa: kod for nazwa, kod in lista_panstw}
+
+   
     
     with st.form("form_dodaj_modal"):
         imie = st.text_input("Imię")
         nazwisko = st.text_input("Nazwisko")
         data_ur = st.date_input("Data urodzenia", min_value=datetime.date(1900, 1, 1), max_value=datetime.date.today())
         plec = st.selectbox("Płeć", ["K", "M"])
-        panstwo_nazwa = st.selectbox("Wybierz państwo", options=list(opcje_panstw.keys()))
+        panstwo_nazwa = st.selectbox("Wybierz państwo", options=[row["nazwa"] for row in lista_panstw])
         
         if st.form_submit_button("Zapisz w bazie", use_container_width=True):
             if imie == "" or nazwisko == "":
                 st.error("Imię i nazwisko nie mogą być puste.")
                 return
-            kod_iso = opcje_panstw[panstwo_nazwa]
+            kod_iso = next(row["kod_iso"] for row in lista_panstw if row["nazwa"] == panstwo_nazwa)
             success, error = athletes_db.add_athlete(imie, nazwisko, data_ur, plec, kod_iso)
             
             if success:

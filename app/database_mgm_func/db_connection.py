@@ -2,6 +2,7 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+@st.cache_resource
 def get_connection():
     """returns a connection to database"""
     try:
