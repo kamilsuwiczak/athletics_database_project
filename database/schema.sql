@@ -50,16 +50,16 @@ CREATE TABLE Zawodnicy(
     nazwisko VARCHAR(50) NOT NULL,
     data_urodzenia DATE NOT NULL,
     plec VARCHAR(1) NOT NULL,
-    id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
-    id_reprezentanta INT REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) NULL,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
+    id_reprezentanta INT NULL REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) ON DELETE SET NULL,
     CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE),
     CONSTRAINT plec_check CHECK (plec IN ('K', 'M')),
     UNIQUE (imie, nazwisko, data_urodzenia, plec)
     );
 
 CREATE TABLE Rekordy_zyciowe(
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
-    id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
+    id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
+    id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji) ON DELETE CASCADE,
     rezultat NUMERIC(10,2) NOT NULL,
     data_rezultatu DATE NOT NULL,
     wynik_punktowy INT NOT NULL,
@@ -70,16 +70,16 @@ CREATE TABLE Rekordy_zyciowe(
     );
 
 CREATE TABLE Trenerzy_zawodnicy(
-    id_trenera INT REFERENCES Trenerzy(id_trenera) NOT NULL,
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
+    id_trenera INT NOT NULL REFERENCES Trenerzy(id_trenera) ON DELETE CASCADE,
+    id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
     PRIMARY KEY (id_trenera, id_zawodnika)
     );
 
 CREATE TABLE Rekordy_swiata(
-    id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
+    id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji) ON DELETE CASCADE,
     rezultat NUMERIC(10,2) NOT NULL,
     data_rezultatu DATE NOT NULL,
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
+    id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
     CONSTRAINT rezultat_rekord_swiata_check CHECK (rezultat >= 0),
     PRIMARY KEY (id_konkurencji, id_zawodnika)
     );
@@ -88,7 +88,7 @@ CREATE TABLE Stadiony(
     id_stadionu SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
     miasto VARCHAR(100) NOT NULL,
-    id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
     UNIQUE (nazwa)
 );
 CREATE TABLE Typy_zawodow(
@@ -100,11 +100,11 @@ CREATE TABLE Typy_zawodow(
 CREATE TABLE Zawody(
     id_zawody SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
-    id_typu_zawodow  INT REFERENCES Typy_zawodow(id_typu_zawodow) NOT NULL,
+    id_typu_zawodow  INT NOT NULL REFERENCES Typy_zawodow(id_typu_zawodow) ON DELETE CASCADE,
     data_rozpoczecia DATE NOT NULL,
     data_zakonczenia DATE NOT NULL,
-    id_panstwa INT REFERENCES Panstwa(id_panstwa) NOT NULL,
-    id_stadionu INT REFERENCES Stadiony(id_stadionu) NOT NULL,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
+    id_stadionu INT NOT NULL REFERENCES Stadiony(id_stadionu) ON DELETE CASCADE,
     CONSTRAINT data_rozpoczecia_check CHECK (data_rozpoczecia <= CURRENT_DATE),
     CONSTRAINT data_zakonczenia_check CHECK (data_zakonczenia >= data_rozpoczecia),
     UNIQUE (nazwa, data_rozpoczecia)
@@ -117,10 +117,10 @@ CREATE TABLE Statusy_wynikow(
 
 CREATE TABLE Wyniki(
     id_wyniku SERIAL PRIMARY KEY,
-    id_zawodnika INT REFERENCES Zawodnicy(id_zawodnika) NOT NULL,
-    id_konkurencji INT REFERENCES Konkurencje(id_konkurencji) NOT NULL,
-    id_zawody INT REFERENCES Zawody(id_zawody) NOT NULL,
-    id_statusu INT REFERENCES Statusy_wynikow(id_statusu) NOT NULL,
+    id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
+    id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji) ON DELETE CASCADE,
+    id_zawody INT NOT NULL REFERENCES Zawody(id_zawody) ON DELETE CASCADE,
+    id_statusu INT NOT NULL REFERENCES Statusy_wynikow(id_statusu) ON DELETE CASCADE,
     rezultat NUMERIC(10,2) NULL,
     miejsce INT NULL,
     data_rezultatu DATE NOT NULL,
