@@ -40,7 +40,7 @@ with col2:
     search_query = st.text_input("", placeholder="Szukaj zawodnika po nazwisku...", label_visibility="collapsed")
 
 if search_query:
-    data = db.get_athletes_filtered(search_query)
+    data = db.get_athletes("name_surname", search_query)
 else:
     data = db.get_athletes()
 
