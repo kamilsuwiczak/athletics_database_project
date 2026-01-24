@@ -1,16 +1,13 @@
 import streamlit as st
 import datetime
-import pandas as pd
-
 import database_mgm_func.athletes as athletes_db
 import database_mgm_func.countries as countries_db
+from components.data_manager import render_crud_view
 
 @st.dialog("Dodaj nowego zawodnika")
-def modal_dodaj_zawodnika():
+def add_modal():
 
     lista_panstw = countries_db.get_countries()
-
-   
     
     with st.form("form_dodaj_modal"):
         imie = st.text_input("Imię")
@@ -32,50 +29,52 @@ def modal_dodaj_zawodnika():
             else:
                 st.error(error)
 
-st.header("Zarządzanie Zawodnikami")
+@st.dialog("Edytuj zawodnika")
+def edit_modal(id_zawodnika):
+    zawodnik = athletes_db.get_athletes("id", id_zawodnika)[0]
 
-col1, col2 = st.columns([1, 3])
+    lista_panstw = countries_db.get_countries()
+    
 
-with col1:
-    if st.button("Dodaj Zawodnika", width='stretch', type="primary"):
-        modal_dodaj_zawodnika()
 
-with col2:
-    search_query = st.text_input("", placeholder="Szukaj zawodnika po nazwisku...", label_visibility="collapsed")
-
-if search_query:
-    data = athletes_db.get_athletes("name_surname", search_query)
-else:
-    data = athletes_db.get_athletes()
-
-df = pd.DataFrame(data)
-
-if not df.empty:
-    event = st.dataframe(
-        df, 
-        use_container_width=True, 
-        hide_index=True,
-        on_select="rerun",  
-        selection_mode="multi-row",
-        column_config={
-            "id_zawodnika": None
-        }
-    )
-
-    selected_rows = event.selection.rows
-    if selected_rows:
-
-        ids_to_delete = df.iloc[selected_rows]["id_zawodnika"].tolist()
-        st.warning(f"Zaznaczono {len(ids_to_delete)} zawodników.")
+    with st.form("form_edit"):
+        imie = st.text_input("Imię", value=zawodnik["Imię"])
+        nazwisko = st.text_input("Nazwisko", value=zawodnik["Nazwisko"])
         
-        if st.button("Usuń zaznaczonych", type="secondary"):
+        col1, col2 = st.columns(2)
+        with col1:
+            data_ur = st.date_input("Data urodzenia", value=zawodnik["Data urodzenia"])
+        with col2:
+            plec_options = ["K", "M"]
+            plec = st.selectbox("Płeć", plec_options, index=plec_options.index(zawodnik["Płeć"]))
             
-            success, error = athletes_db.delete_athletes(ids_to_delete)
-            if success:
-                st.success("Usunięto pomyślnie!")
-                st.rerun()
+        panstwo_nazwa = st.selectbox("Państwo", options=[row["nazwa"] for row in lista_panstw], index=[row["nazwa"] for row in lista_panstw].index(zawodnik["Kraj"]))
+
+        st.divider()
+        
+        if st.form_submit_button("Zapisz zmiany", use_container_width=True, type="primary"):
+            if imie and nazwisko:
+                id_panstwa = next(row["id_panstwa"] for row in lista_panstw if row["nazwa"] == panstwo_nazwa)
+                success, error = athletes_db.update_athlete(
+                    id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa
+                )
+                
+                if success:
+                    st.success("Zaktualizowano pomyślnie!")
+                    st.rerun()
+                else:
+                    st.error(f"Błąd: {error}")
             else:
-                st.error(f"Nie można usunąć: {error} (Może zawodnik ma już przypisane wyniki?)")
-else:
-    st.info("Brak danych do wyświetlenia.")
+                st.error("Imię i nazwisko są wymagane!")
+
+render_crud_view(
+    header_title="Zarządzanie Zawodnikami",
+    db_fetch_func=lambda query=None: athletes_db.get_athletes("name_surname", query) if query else athletes_db.get_athletes(),
+    db_delete_func=athletes_db.delete_athletes,
+    add_modal_func=add_modal,
+    edit_modal_func=edit_modal,
+    display_columns_for_delete=["Imię", "Nazwisko"],
+    id_column_name="id_zawodnika",
+    search_placeholder="Szukaj zawodnika po imieniu lub nazwisku...",
+)
 
