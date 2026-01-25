@@ -12,6 +12,12 @@ services:
       - ./pgdata:/var/lib/postgresql/data
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
       - ./database/example_data.sql:/docker-entrypoint-initdb.d/02_data.sql
+    healthcheck:
+      test: ["pg_isready", "-U", "myuser"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 
   app:
     image: python:3.11-slim

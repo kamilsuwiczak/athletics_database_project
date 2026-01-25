@@ -3,9 +3,9 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_tournament_types(filter_by=None, search_term=None):
+def get_competition_types(filter_by=None, search_term=None):
     with get_connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
             if filter_by == 'name':
                 query = """
                 SELECT id_typu_zawodow, nazwa_typu
@@ -19,10 +19,10 @@ def get_tournament_types(filter_by=None, search_term=None):
                 cur.execute("SELECT id_typu_zawodow, nazwa_typu FROM Typy_zawodow ORDER BY nazwa_typu ASC")
             return cur.fetchall()
         
-def add_tournament_type(nazwa_typu):
+def add_competition_type(nazwa_typu):
     with get_connection() as conn:
         try:
-            with conn.cursor() as cur:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute("INSERT INTO Typy_zawodow (nazwa_typu) VALUES (%s)", (nazwa_typu,))
                 conn.commit()
                 return True, None
@@ -30,10 +30,10 @@ def add_tournament_type(nazwa_typu):
             conn.rollback()
             return False, str(e)
 
-def delete_tournament_types(ids_to_delete):
+def delete_competition_types(ids_to_delete):
     with get_connection() as conn:
         try:
-            with conn.cursor() as cur:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute("DELETE FROM Typy_zawodow WHERE id_typu_zawodow = ANY(%s)", (ids_to_delete,))
                 conn.commit()
                 return True, None
@@ -41,10 +41,10 @@ def delete_tournament_types(ids_to_delete):
             conn.rollback()
             return False, str(e)
 
-def update_tournament_type(id_typu_zawodow, nazwa_typu):
+def update_competition_type(id_typu_zawodow, nazwa_typu):
     with get_connection() as conn:
         try:
-            with conn.cursor() as cur:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute("""
                     UPDATE Typy_zawodow 
                     SET nazwa_typu = %s

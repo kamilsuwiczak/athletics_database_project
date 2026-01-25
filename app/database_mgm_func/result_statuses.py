@@ -1,23 +1,35 @@
-import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_result_statuses(filter_by=None, search_term=None):
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            if filter_by == 'name':
-                query = """
-                SELECT id_statusu, status_wyniku
-                FROM Statusy_wynikow
-                WHERE status_wyniku ILIKE %s
-                ORDER BY status_wyniku ASC
-                """
-                param = f"%{search_term}%"
-                cur.execute(query, (param,))
+def get_statuses(filter_by=None, search_term=None):
+    conn = get_connection()
+    
+    # WAŻNE: W bazie masz 'status_wyniku', ale widok oczekuje 'nazwa'.
+    # Używamy aliasu, żeby frontend działał bez zmian.
+    base_query = """
+        SELECT id_statusu, status_wyniku AS "nazwa"
+        FROM Statusy_wynikow
+    """
+    
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        if not filter_by or not search_term:
+            cur.execute(base_query + " ORDER BY id_statusu ASC")
+        else:
+            # Filtrowanie
+            filters = {
+                'nazwa': ("status_wyniku ILIKE %s", f"%{search_term}%"),
+                'id': ("id_statusu = %s", search_term)
+            }
+
+            if filter_by in filters:
+                where_clause, params = filters[filter_by]
+                query = f"{base_query} WHERE {where_clause} ORDER BY status_wyniku ASC"
+                cur.execute(query, (params,))
             else:
-                cur.execute("SELECT id_statusu, status_wyniku FROM Statusy_wynikow ORDER BY status_wyniku ASC")
-            return cur.fetchall()
+                cur.execute(base_query + " ORDER BY id_statusu ASC")
+                
+        return cur.fetchall()
 
 def add_result_status(status_wyniku):
     with get_connection() as conn:

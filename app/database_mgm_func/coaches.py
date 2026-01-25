@@ -1,3 +1,4 @@
+import psycopg2
 import streamlit as st
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
@@ -5,24 +6,40 @@ from database_mgm_func.db_connection import get_connection
 
 def get_coaches(filter_by=None, search_term=None):
     conn = get_connection()
+    
+    # Bazowe zapytanie - stałe nazwy kolumn dla widoku
+    base_query = """
+        SELECT id_trenera, 
+               imie AS "Imię", 
+               nazwisko AS "Nazwisko", 
+               adres_email AS "Adres email"
+        FROM Trenerzy
+    """
+    
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if filter_by == 'name_surname':
-            query = """
-            SELECT id_trenera, imie AS "Imię", nazwisko AS "Nazwisko", adres_email AS "Adres email"
-            FROM Trenerzy
-            WHERE nazwisko ILIKE %s OR imie ILIKE %s
-            ORDER BY nazwisko ASC
-            """
-            param = f"%{search_term}%"
-            cur.execute(query, (param, param))
+        if not filter_by or not search_term:
+            # Domyślne sortowanie
+            cur.execute(base_query + " ORDER BY id_trenera DESC")
+        
         else:
-            cur.execute("""
-            SELECT id_trenera, imie AS "Imię", nazwisko AS "Nazwisko", adres_email AS "Adres email"
-            FROM Trenerzy
-            ORDER BY id_trenera DESC
-        """)
-        return cur.fetchall()
+            # Mapowanie filtrów (musi pasować do search_cfg w widoku)
+            filters = {
+                'imie': ("imie ILIKE %s", f"%{search_term}%"),
+                'nazwisko': ("nazwisko ILIKE %s", f"%{search_term}%"),
+                'email': ("adres_email ILIKE %s", f"%{search_term}%"),
+                # Potrzebne do pobrania jednego trenera w edit_modal:
+                'id': ("id_trenera = %s", search_term) 
+            }
 
+            if filter_by in filters:
+                where_clause, params = filters[filter_by]
+                query = f"{base_query} WHERE {where_clause} ORDER BY nazwisko ASC"
+                
+                cur.execute(query, (params,))
+            else:
+                cur.execute(base_query + " ORDER BY id_trenera DESC")
+
+        return cur.fetchall()
 def add_coach(imie, nazwisko, adres_email):
     conn = get_connection()
     try:
@@ -43,9 +60,12 @@ def delete_coaches(ids_to_delete):
             cur.execute("DELETE FROM Trenerzy WHERE id_trenera = ANY(%s)", (ids_to_delete,))
             conn.commit()
             return True, None
-    except Exception as e:
+    except psycopg2.errors.ForeignKeyViolation:
         conn.rollback()
-        return False, str(e)
+        return False, "Nie można usunąć trenera, ponieważ jest przypisany do jednego lub więcej zawodników."
+    except Exception:
+        conn.rollback()
+        return False, 'Błąd podczas usuwania trenerów'
 
 def update_coach(id_trenera, imie, nazwisko, adres_email):
     conn = get_connection()

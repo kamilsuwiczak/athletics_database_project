@@ -4,8 +4,6 @@ from components.data_manager import render_crud_view
 
 @st.dialog("Dodaj nowe państwo")
 def add_modal():
-
-    
     with st.form("form_dodaj_modal"):
         nazwa = st.text_input("Nazwa").strip()
         kod_iso = st.text_input("Kod ISO").strip()
@@ -49,7 +47,6 @@ def edit_modal(id_panstwa):
                 st.error("Nazwa i kod ISO są wymagane!")
 
 
-
 render_crud_view(
     header_title="Zarządzanie Państwami",
     db_fetch_func=lambda query=None: countries_db.get_countries("name", query) if query else countries_db.get_countries(),
@@ -58,6 +55,6 @@ render_crud_view(
     edit_modal_func=edit_modal,
     display_columns_for_delete=["nazwa", "kod_iso"],
     id_column_name="id_panstwa",
-    search_placeholder="Szukaj państwa po nazwie lub kodzie ISO...",
 )
+
 

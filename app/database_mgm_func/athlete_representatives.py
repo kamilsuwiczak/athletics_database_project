@@ -44,9 +44,13 @@ def delete_athlete_representatives(ids_to_delete):
                 cur.execute("DELETE FROM Reprezentanci_Zawodnikow WHERE id_reprezentanta = ANY(%s)", (ids_to_delete,))
                 conn.commit()
                 return True, None
-        except Exception as e:
+        except psycopg2.errors.ForeignKeyViolation:
             conn.rollback()
-            return False, str(e)
+            return False, "Nie można usunąć reprezentanta, ponieważ jest przypisany do jednego lub więcej zawodników."
+        except Exception:
+            conn.rollback()
+            return False, 'Bład podczas usuwania reprezentantów'
+        
 
 def update_athlete_representative(id_reprezentanta, name, surname):
     with get_connection() as conn:
