@@ -7,8 +7,8 @@ def add_modal():
 
     
     with st.form("form_dodaj_modal"):
-        nazwa = st.text_input("Nazwa")
-        kod_iso = st.text_input("Kod ISO")
+        nazwa = st.text_input("Nazwa").strip()
+        kod_iso = st.text_input("Kod ISO").strip()
         
         if st.form_submit_button("Zapisz w bazie", use_container_width=True):
             if nazwa == "" or kod_iso == "":
@@ -28,8 +28,8 @@ def edit_modal(id_panstwa):
     panstwo = countries_db.get_countries("id_panstwa", id_panstwa)[0]
 
     with st.form("form_edit"):
-        nazwa = st.text_input("Nazwa", value=panstwo["nazwa"])
-        kod_iso = st.text_input("Kod ISO", value=panstwo["kod_iso"])
+        nazwa = st.text_input("Nazwa", value=panstwo["nazwa"]).strip()
+        kod_iso = st.text_input("Kod ISO", value=panstwo["kod_iso"]).strip()
         
         
         st.divider()

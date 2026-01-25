@@ -10,8 +10,8 @@ def add_modal():
     lista_panstw = countries_db.get_countries()
     
     with st.form("form_dodaj_modal"):
-        imie = st.text_input("Imię")
-        nazwisko = st.text_input("Nazwisko")
+        imie = st.text_input("Imię").strip()
+        nazwisko = st.text_input("Nazwisko").strip()
         data_ur = st.date_input("Data urodzenia", min_value=datetime.date(1900, 1, 1), max_value=datetime.date.today())
         plec = st.selectbox("Płeć", ["K", "M"])
         panstwo_nazwa = st.selectbox("Wybierz państwo", options=[row["nazwa"] for row in lista_panstw])
@@ -38,8 +38,8 @@ def edit_modal(id_zawodnika):
 
 
     with st.form("form_edit"):
-        imie = st.text_input("Imię", value=zawodnik["Imię"])
-        nazwisko = st.text_input("Nazwisko", value=zawodnik["Nazwisko"])
+        imie = st.text_input("Imię", value=zawodnik["Imię"]).strip()
+        nazwisko = st.text_input("Nazwisko", value=zawodnik["Nazwisko"]).strip()
         
         col1, col2 = st.columns(2)
         with col1:
