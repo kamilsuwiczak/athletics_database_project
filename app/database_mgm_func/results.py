@@ -4,10 +4,6 @@ from database_mgm_func.db_connection import get_connection
 
 def get_results(filter_by=None, search_term=None):
     conn = get_connection()
-    
-    # Łączymy tabelę Wyniki z resztą tabel.
-    # Dostosowano nazwy kolumn do Twojego schematu SQL:
-    # s.status_wyniku, k.nazwa, zw.nazwa
     base_query = """
         SELECT w.id_wyniku,
                z.imie || ' ' || z.nazwisko AS "Zawodnik",
@@ -61,7 +57,6 @@ def add_result(id_zawodnika, id_konkurencji, id_zawody, id_statusu, rezultat, mi
             return True, None
     except Exception as e:
         conn.rollback()
-        # Obsługa Unique Constraint z Twojego schematu
         if "unique constraint" in str(e).lower():
             return False, "Ten zawodnik ma już wpisany wynik w tej konkurencji na tych zawodach."
         return False, str(e)
@@ -96,7 +91,6 @@ def delete_results(ids):
 def get_raw_result(id_wyniku):
     conn = get_connection()
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        # Pobieramy IDki do edycji
         cur.execute("""
             SELECT id_zawodnika, id_konkurencji, id_zawody, id_statusu, rezultat, miejsce, data_rezultatu
             FROM Wyniki WHERE id_wyniku = %s

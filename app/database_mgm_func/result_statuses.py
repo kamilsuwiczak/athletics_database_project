@@ -4,9 +4,6 @@ from database_mgm_func.db_connection import get_connection
 
 def get_statuses(filter_by=None, search_term=None):
     conn = get_connection()
-    
-    # WAŻNE: W bazie masz 'status_wyniku', ale widok oczekuje 'nazwa'.
-    # Używamy aliasu, żeby frontend działał bez zmian.
     base_query = """
         SELECT id_statusu, status_wyniku AS "nazwa"
         FROM Statusy_wynikow
