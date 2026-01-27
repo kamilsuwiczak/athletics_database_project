@@ -46,14 +46,20 @@ def edit_modal(id_dyscypliny):
             else:
                 st.error("Nazwa i rodzaj są wymagane!")
 
+search_cfg = [
+    {"label": "Nazwa", "value": "nazwa"},
+    {"label": "Rodzaj", "value": "rodzaj"},
+]
 render_crud_view(
-    header_title="Zarządzanie Dyscyplinami",
-    db_fetch_func=lambda query=None: disciplines_db.get_disciplines("nazwa", query) if query else disciplines_db.get_disciplines(),
+    header_title="Zarządzanie Konkurencjami",
+    db_fetch_func= disciplines_db.get_disciplines,
     db_delete_func=disciplines_db.delete_disciplines,
     add_modal_func=add_modal,
     edit_modal_func=edit_modal,
     display_columns_for_delete=["nazwa", "rodzaj"],
     id_column_name="id_konkurencji",
+    search_columns=search_cfg,
+    delete_message="konkurencji?"
 )
 
 
