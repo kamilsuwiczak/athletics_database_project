@@ -157,7 +157,7 @@ def show_pb_modal(id_zawodnika):
 
     records = pbs_db.get_personal_bests(id_zawodnika)
     
-    tab_list, tab_manage = st.tabs(["📋 Lista Rekordów", "➕ Dodaj / ✏️ Edytuj"])
+    tab_list, tab_manage = st.tabs(["Lista Rekordów", "➕ Dodaj / ✏️ Edytuj"])
 
     with tab_list:
         if not records:
@@ -169,10 +169,10 @@ def show_pb_modal(id_zawodnika):
                 hide_index=True,
                 column_config={
                     "Konkurencja": st.column_config.TextColumn("Konkurencja"),
-                    "Data": st.column_config.DateColumn("Data", format="DD.MM.YYYY"),
+                    "Data": st.column_config.DateColumn("Data", format="DD.MM.YYYY", max_value=datetime.date.today(), min_value=datetime.date(1900, 1, 1)),
                     "Wynik": st.column_config.NumberColumn("Wynik", format="%.2f"),
                     "Punkty": st.column_config.NumberColumn("Punkty WA"),
-                    "id_konkurencji": st.column_config.Column("id_konkurencji", disabled=True)
+                    'id_konkurencji': None
                 }
             )
 
@@ -200,7 +200,7 @@ def show_pb_modal(id_zawodnika):
         with st.form("pb_form"):
             c1, c2 = st.columns(2)
             with c1:
-                val_wynik = st.number_input("Wynik (s lub m)", min_value=0.0, value=default_wynik, step=0.01, format="%.2f")
+                val_wynik = st.number_input("Wynik", min_value=0.0, value=default_wynik, step=0.01, format="%.2f")
                 val_punkty = st.number_input("Punkty World Athletics", min_value=0, max_value=2000, value=default_punkty, step=1)
             with c2:
                 val_data = st.date_input("Data uzyskania", value=default_data, max_value=datetime.date.today())
