@@ -3,29 +3,13 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-# def get_disciplines(filter_by=None, search_term=None):
-#     conn = get_connection()
-#     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-#         if filter_by == 'name':
-#             query = """
-#             SELECT id_konkurencji, nazwa, rodzaj AS "Rodzaj"
-#             FROM Konkurencje
-#             WHERE nazwa ILIKE %s
-#             ORDER BY nazwa ASC
-#             """
-#             param = f"%{search_term}%"
-#             cur.execute(query, (param,))
-#         else:
-#             cur.execute("SELECT id_konkurencji, nazwa, rodzaj FROM Konkurencje ORDER BY nazwa ASC")
-#         return cur.fetchall()
-
 def get_disciplines(filter_by=None, search_term=None):
     conn = get_connection()
     
     base_query = """
         SELECT id_konkurencji, 
-               nazwa AS "Nazwa", 
-               rodzaj AS "Rodzaj"
+               nazwa, 
+               rodzaj
         FROM Konkurencje
     """
     
@@ -33,19 +17,18 @@ def get_disciplines(filter_by=None, search_term=None):
         if not filter_by or not search_term:
             cur.execute(base_query + " ORDER BY nazwa ASC")
         else:
-            # Definicja dostępnych filtrów
+   
             filters = {
                 'nazwa': ("nazwa ILIKE %s", f"%{search_term}%"),
-                'rodzaj': ("rodzaj ILIKE %s", f"%{search_term}%")
+                'rodzaj': ("rodzaj ILIKE %s", f"%{search_term}%"),
+                'id': ("id_konkurencji = %s", search_term) 
             }
             
-            # Sprawdzenie czy wybrany filtr istnieje w słowniku
             if filter_by in filters:
                 where_clause, params = filters[filter_by]
                 query = f"{base_query} WHERE {where_clause} ORDER BY nazwa ASC"
                 cur.execute(query, (params,))
             else:
-                # Fallback, gdyby wybrano nieznany filtr
                 cur.execute(base_query + " ORDER BY nazwa ASC")
         return cur.fetchall()
 
