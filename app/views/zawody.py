@@ -150,7 +150,7 @@ with st.sidebar:
     f_rok = st.number_input("Rok", min_value=1900, max_value=2100, value=None, placeholder="np. 2024", key="comp_rok")
     
     st.divider()
-    st.button("Wyczyść filtry", icon="🗑️", on_click=reset_filters, use_container_width=True)
+    st.button("Wyczyść filtry", on_click=reset_filters, use_container_width=True)
 
 selected_type_id = types_map_filter[f_typ] if f_typ != "Wszystkie" else None
 selected_country_id = countries_map_filter[f_kraj] if f_kraj != "Wszystkie" else None

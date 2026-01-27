@@ -84,7 +84,7 @@ with st.sidebar:
     f_kraj = st.selectbox("Kraj", ["Wszystkie"] + list(panstwa_map_filter.keys()), key="stad_kraj")
     
     st.divider()
-    st.button("Wyczyść filtry", icon="🗑️", use_container_width=True, on_click=reset_filters)
+    st.button("Wyczyść filtry", use_container_width=True, on_click=reset_filters)
 
 f_id_panstwa = panstwa_map_filter[f_kraj] if f_kraj != "Wszystkie" else None
 
