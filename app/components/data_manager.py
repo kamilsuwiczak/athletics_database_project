@@ -52,13 +52,21 @@ def render_crud_view(
         return
 
 
+    column_configuration = {
+        id_column_name: None
+    }
+    technical_cols = ["id_zawodnika", "id_konkurencji", "id_stadionu", "id_panstwa"]
+    for col in technical_cols:
+        if col in df.columns:
+            column_configuration[col] = None
+
     event = st.dataframe(
         df, 
         use_container_width=True, 
         hide_index=True,
         on_select="rerun",  
         selection_mode="multi-row",
-        column_config={id_column_name: None}
+        column_config=column_configuration
     )
 
    
@@ -96,8 +104,8 @@ def render_crud_view(
 def render_delete_dialog(ids, items_list, delete_callback, delete_message="elementy?"):
     st.warning(f"Czy na pewno chcesz usunąć {len(ids)} {delete_message} ")
     for item in items_list:
-        st.write(f"- {item}")
-    
+        st.write(f"- {item} ")
+
     st.divider()
     c1, c2 = st.columns(2)
     if c1.button("Anuluj", use_container_width=True):

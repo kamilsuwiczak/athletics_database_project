@@ -9,7 +9,8 @@ def get_venues(filter_by=None, search_term=None, **advanced_filters):
         SELECT s.id_stadionu, 
                s.nazwa, 
                s.miasto, 
-               p.nazwa AS "Kraj"
+               p.nazwa AS "Kraj",
+               p.id_panstwa
         FROM Stadiony s
         JOIN Panstwa p ON s.id_panstwa = p.id_panstwa
     """

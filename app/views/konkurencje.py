@@ -59,7 +59,7 @@ render_crud_view(
     db_delete_func=disciplines_db.delete_disciplines,
     add_modal_func=add_modal,
     edit_modal_func=edit_modal,
-    display_columns_for_delete=["nazwa", "rodzaj"],
+    display_columns_for_delete=["nazwa"],
     id_column_name="id_konkurencji",
     search_columns=search_cfg,
     delete_message="konkurencji?"

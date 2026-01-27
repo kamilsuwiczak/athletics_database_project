@@ -3,21 +3,43 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_countries(filter_by = None, search_term = None):
+def get_countries(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
+    
+    base_query = """
+        SELECT id_panstwa, 
+               nazwa, 
+               kod_iso, 
+               kontynent, 
+               stolica 
+        FROM Panstwa
+    """
+    
+    conditions = []
+    params = []
+
+    if filter_by == "id_panstwa" and search_term:
+        conditions.append("id_panstwa = %s")
+        params.append(search_term)
+
+    if advanced_filters.get('f_nazwa'):
+        conditions.append("nazwa ILIKE %s")
+        params.append(f"%{advanced_filters['f_nazwa']}%")
+        
+    if advanced_filters.get('f_kod'):
+        conditions.append("kod_iso ILIKE %s")
+        params.append(f"%{advanced_filters['f_kod']}%")
+
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    full_query = base_query + where_clause + " ORDER BY nazwa ASC"
+
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if filter_by == 'name_kod_iso':
-            query = "SELECT id_panstwa, nazwa, kod_iso FROM Panstwa WHERE nazwa ILIKE %s  OR kod_iso ILIKE %s ORDER BY nazwa ASC"
-            param = f"%{search_term}%"
-            cur.execute(query, (param, param))
+        try:
+            cur.execute(full_query, params)
             return cur.fetchall()
-        if filter_by == 'id_panstwa':
-            query = "SELECT id_panstwa, nazwa, kod_iso FROM Panstwa WHERE id_panstwa = %s ORDER BY nazwa ASC"
-            cur.execute(query, (search_term,))
-            return cur.fetchall()
-        else:
-            cur.execute("SELECT id_panstwa, nazwa, kod_iso FROM Panstwa ORDER BY nazwa ASC")
-        return cur.fetchall()
+        except Exception as e:
+            print(f"SQL Error: {e}")
+            return []
 
 def update_country(id_panstwa, new_name, new_iso_code):
     conn = get_connection()
