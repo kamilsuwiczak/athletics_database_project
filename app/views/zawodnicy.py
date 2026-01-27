@@ -157,11 +157,7 @@ def show_pb_modal(id_zawodnika):
 
     records = pbs_db.get_personal_bests(id_zawodnika)
     
-<<<<<<< HEAD
-    tab_list, tab_manage = st.tabs(["Lista Rekordów", "➕ Dodaj / ✏️ Edytuj"])
-=======
     tab_list, tab_manage = st.tabs(["Lista Rekordów", "Dodaj /Edytuj"])
->>>>>>> 34a6d73d4ccd9bd0200b480d1db9d9d0fd84645a
 
     with tab_list:
         if not records:
@@ -230,7 +226,7 @@ def show_pb_modal(id_zawodnika):
       
         if existing_record:
             st.divider()
-            if st.button("🗑️ Usuń ten rekord", type="secondary", use_container_width=True):
+            if st.button("Usuń ten rekord", type="secondary", use_container_width=True):
                 success, msg = pbs_db.delete_personal_best(id_zawodnika, selected_disc_id)
                 if success:
                     st.warning("Rekord został usunięty.")
