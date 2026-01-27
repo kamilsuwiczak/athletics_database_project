@@ -136,31 +136,17 @@ CREATE OR REPLACE PROCEDURE dodaj_zawodnika(
     p_nazwisko VARCHAR,
     p_data_urodzenia DATE,
     p_plec CHAR,
-    p_kod_iso_panstwa CHAR,
-    p_id_reprezentanta INT DEFAULT NULL
+    p_id_panstwa INT,
+    p_id_reprezentanta INT DEFAULT NULL,
+    INOUT p_nowe_id INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
-DECLARE
-    v_id_panstwa INT;
-    v_nowy_id_zawodnika INT;
 BEGIN
-    
-    SELECT id_panstwa INTO v_id_panstwa
-    FROM Panstwa
-    WHERE kod_iso = UPPER(p_kod_iso_panstwa); 
-    
-    
-    IF v_id_panstwa IS NULL THEN
-        RAISE EXCEPTION 'Błąd: Kraj o kodzie ISO "%" nie istnieje w bazie danych.', p_kod_iso_panstwa;
-    END IF;
-
-    
     IF p_plec NOT IN ('K', 'M') THEN
         RAISE EXCEPTION 'Błąd: Płeć musi być "K" lub "M".';
     END IF;
 
-    
     INSERT INTO Zawodnicy (
         imie, 
         nazwisko, 
@@ -173,15 +159,16 @@ BEGIN
         p_nazwisko,
         p_data_urodzenia,
         p_plec,
-        v_id_panstwa,
+        p_id_panstwa,
         p_id_reprezentanta
-    ) RETURNING id_zawodnika INTO v_nowy_id_zawodnika;
+    ) 
+    RETURNING id_zawodnika INTO p_nowe_id;
 
-    RAISE NOTICE 'Pomyślnie dodano nowego zawodnika: % % (ID: %).', 
-                 p_imie, p_nazwisko, v_nowy_id_zawodnika;
-
+    RAISE NOTICE 'Pomyślnie dodano zawodnika ID: %', p_nowe_id;
 END;
 $$;
+
+
 
 CREATE OR REPLACE FUNCTION zlicz_medale_w_typie_zawodow(
     p_id_zawodnika INT,

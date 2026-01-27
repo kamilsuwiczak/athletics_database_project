@@ -90,16 +90,18 @@ def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, plec, id_panstwa, id_reprezentanta)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                RETURNING id_zawodnika
-            """, (imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta))
+                CALL dodaj_zawodnika(%s, %s, %s, %s, %s, %s, %s)
+            """, (imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta, None))
             
-            new_id = cur.fetchone()[0]
+            result = cur.fetchone()
+            new_id = result[0]
+            
             conn.commit()
             return True, new_id
+            
     except Exception as e:
         conn.rollback()
+        print(f"Błąd SQL: {e}")
         return False, str(e)
 
 def update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
