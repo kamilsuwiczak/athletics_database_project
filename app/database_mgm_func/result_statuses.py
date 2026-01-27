@@ -13,7 +13,6 @@ def get_statuses(filter_by=None, search_term=None):
         if not filter_by or not search_term:
             cur.execute(base_query + " ORDER BY id_statusu ASC")
         else:
-            # Filtrowanie
             filters = {
                 'nazwa': ("status_wyniku ILIKE %s", f"%{search_term}%"),
                 'id': ("id_statusu = %s", search_term)

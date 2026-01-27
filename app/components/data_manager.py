@@ -14,7 +14,7 @@ def render_crud_view(
 ):
     st.header(header_title)
 
-    col_add, col_search_type, col_search_val = st.columns([1, 1.5, 2.5])
+    col_add, col_search_val, col_search_type = st.columns([1, 1.5, 2.5])
     
     with col_add:
         if st.button(f"Dodaj", type="primary", use_container_width=True):
@@ -38,6 +38,7 @@ def render_crud_view(
                 placeholder=f"Filtruj wg {search_col_label.lower()}...", 
                 label_visibility="collapsed"
             )
+            
     if search_val and search_col:
         data = db_fetch_func(search_col, search_val)
     else:

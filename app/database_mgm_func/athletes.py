@@ -13,15 +13,17 @@ def get_athletes(filter_by=None, search_term=None):
                z.data_urodzenia AS "Data urodzenia", 
                z.plec AS "Płeć", 
                p.nazwa AS "Kraj",
-               COALESCE(STRING_AGG(t.imie || ' ' || t.nazwisko, ', '), 'Brak') AS "Trenerzy"
+               COALESCE(STRING_AGG(t.imie || ' ' || t.nazwisko, ', '), 'Brak') AS "Trenerzy",
+               r.adres_email AS "Email reprezentanta"
         FROM Zawodnicy z 
         JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
         LEFT JOIN Trenerzy_zawodnicy zt ON z.id_zawodnika = zt.id_zawodnika
         LEFT JOIN Trenerzy t ON zt.id_trenera = t.id_trenera
+        LEFT JOIN Reprezentanci_zawodnikow r ON z.id_reprezentanta = r.id_reprezentanta
     """
     
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa"
+        group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa, r.adres_email"
         
         if not filter_by or not search_term:
             cur.execute(base_query + group_by_clause + " ORDER BY z.id_zawodnika DESC")
