@@ -10,7 +10,9 @@ def render_crud_view(
     id_column_name,
     display_columns_for_delete,
     search_columns=None,  
-    delete_message="elementy?"
+    delete_message="elementy?",
+    optional_column_modal_func=None,
+    optional_column_modal_text=None
 ):
     st.header(header_title)
 
@@ -63,7 +65,7 @@ def render_crud_view(
     selected_rows = event.selection.rows
     ids = []
 
-    col_del, col_edit, _ = st.columns([1, 1, 3])
+    col_del, col_edit, col_optional, _ = st.columns([1, 1, 2, 3])
         
 
     if selected_rows:
@@ -81,7 +83,14 @@ def render_crud_view(
         is_disabled = not event.selection.rows or len(event.selection.rows) != 1  
         if st.button("Edytuj rekord", type="secondary", use_container_width=True, disabled=is_disabled):
             edit_modal_func(ids[0])
-        
+    
+    if optional_column_modal_func:
+        with col_optional:
+            is_disabled = not event.selection.rows or len(event.selection.rows) != 1
+            if st.button(optional_column_modal_text, type="secondary", use_container_width=True, disabled=is_disabled):
+                optional_column_modal_func(ids[0])
+    
+
         
 @st.dialog("Potwierdź usunięcie")
 def render_delete_dialog(ids, items_list, delete_callback, delete_message="elementy?"):

@@ -3,69 +3,65 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_personal_bests(filter_by=None, search_term=None):
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            if filter_by == 'name_surname':
-                query = """
-                SELECT z.imie as "Imię", z.nazwisko AS "Nazwisko", 
-                    d.nazwa AS "Konkurencja", pb.rezultat AS "Rezultat", 
-                        pb.data_rezultatu AS "Data rezultatu",pb.wynik_punktowy AS "Wynik punktowy"
-                FROM Rekordy_zyciowe pb
-                JOIN Zawodnicy z ON pb.id_zawodnika = z.id_zawodnika
-                JOIN Konkurencje d ON pb.id_konkurencji = d.id_konkurencji
-                WHERE z.nazwisko ILIKE %s OR z.imie ILIKE %s
-                ORDER BY z.nazwisko ASC
-                """
-                param = f"%{search_term}%"
-                cur.execute(query, (param, param))
-            else:
-                cur.execute("""
-                    SELECT z.imie as "Imię", z.nazwisko AS "Nazwisko", 
-                        d.nazwa AS "Konkurencja", pb.rezultat AS "Rezultat", 
-                            pb.data_rezultatu AS "Data rezultatu",pb.wynik_punktowy AS "Wynik punktowy"
-                    FROM Rekordy_zyciowe pb
-                    JOIN Zawodnicy z ON pb.id_zawodnika = z.id_zawodnika
-                    JOIN Konkurencje d ON pb.id_konkurencji = d.id_konkurencji
-                """)
-            return cur.fetchall()
+def get_personal_bests(id_zawodnika):
+    """Pobiera obecne rekordy życiowe zawodnika"""
+    conn = get_connection()
+    query = """
+        SELECT k.id_konkurencji, 
+               k.nazwa AS "Konkurencja",
+               rz.rezultat AS "Wynik",
+               rz.data_rezultatu AS "Data",
+               rz.wynik_punktowy AS "Punkty"
+        FROM Rekordy_zyciowe rz
+        JOIN Konkurencje k ON rz.id_konkurencji = k.id_konkurencji
+        WHERE rz.id_zawodnika = %s
+        ORDER BY k.nazwa ASC
+    """
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(query, (id_zawodnika,))
+        return cur.fetchall()
 
-def add_personal_best(id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy):
-    with get_connection() as conn:
-        try:
-            with conn.cursor() as cur:
-                cur.execute("INSERT INTO Rekordy_zyciowe (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy) VALUES (%s, %s, %s, %s, %s)", 
-                        (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy))
-                conn.commit()
-                return True, None
-        except Exception as e:
-            conn.rollback()
-            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-            return False, error_msg
+def get_all_disciplines():
+    """Pobiera listę wszystkich dostępnych konkurencji"""
+    conn = get_connection()
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute("SELECT id_konkurencji, nazwa FROM Konkurencje ORDER BY nazwa ASC")
+        return cur.fetchall()
 
-def delete_personal_bests(ids_to_delete):
-    with get_connection() as conn:
-        try:
-            with conn.cursor() as cur:
-                cur.execute("DELETE FROM Rekordy_zyciowe WHERE id_rekordu = ANY(%s)", (ids_to_delete,))
-                conn.commit()
-                return True, None
-        except Exception as e:
-            conn.rollback()
-            return False, str(e)
+def upsert_personal_best(id_zawodnika, id_konkurencji, rezultat, data, punkty):
+    """
+    Dodaje nowy rekord lub aktualizuje istniejący (ON CONFLICT).
+    """
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            query = """
+                INSERT INTO Rekordy_zyciowe (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (id_zawodnika, id_konkurencji) 
+                DO UPDATE SET 
+                    rezultat = EXCLUDED.rezultat,
+                    data_rezultatu = EXCLUDED.data_rezultatu,
+                    wynik_punktowy = EXCLUDED.wynik_punktowy
+            """
+            cur.execute(query, (id_zawodnika, id_konkurencji, rezultat, data, punkty))
+            conn.commit()
+            return True, None
+    except Exception as e:
+        conn.rollback()
+        return False, str(e)
 
-def update_personal_best(id_rekordu, id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy):
-    with get_connection() as conn:
-        try:
-            with conn.cursor() as cur:
-                cur.execute("""
-                    UPDATE Rekordy_zyciowe 
-                    SET id_zawodnika = %s, id_konkurencji = %s, rezultat = %s, data_rezultatu = %s, wynik_punktowy = %s
-                    WHERE id_rekordu = %s
-                """, (id_zawodnika, id_konkurencji, rezultat, data_rezultatu, wynik_punktowy, id_rekordu))
-                conn.commit()
-                return True, None
-        except Exception as e:
-            conn.rollback()
-            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-            return False, error_msg
+def delete_personal_best(id_zawodnika, id_konkurencji):
+    """Usuwa rekord życiowy w danej konkurencji"""
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                DELETE FROM Rekordy_zyciowe 
+                WHERE id_zawodnika = %s AND id_konkurencji = %s
+            """, (id_zawodnika, id_konkurencji))
+            conn.commit()
+            return True, None
+    except Exception as e:
+        conn.rollback()
+        return False, str(e)

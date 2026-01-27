@@ -4,6 +4,7 @@ import database_mgm_func.athletes as athletes_db
 import database_mgm_func.countries as countries_db
 import database_mgm_func.coaches as coaches_db
 import database_mgm_func.athlete_representatives as athlete_reps_db
+import database_mgm_func.personal_bests as pbs_db
 from components.data_manager import render_crud_view
 
 
@@ -148,7 +149,90 @@ def edit_modal(id_zawodnika):
             else:
                 st.error("Imię i nazwisko są wymagane!")
 
+@st.dialog("Rekordy Życiowe (PB)")
+def show_pb_modal(id_zawodnika):
+  
+    zawodnik = athletes_db.get_athletes(filter_by='id', search_term=id_zawodnika)[0]
+    st.subheader(f"{zawodnik['Imię']} {zawodnik['Nazwisko']}")
 
+    records = pbs_db.get_personal_bests(id_zawodnika)
+    
+    tab_list, tab_manage = st.tabs(["📋 Lista Rekordów", "➕ Dodaj / ✏️ Edytuj"])
+
+    with tab_list:
+        if not records:
+            st.info("Brak wprowadzonych rekordów życiowych.")
+        else:
+            st.dataframe(
+                records, 
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Konkurencja": st.column_config.TextColumn("Konkurencja"),
+                    "Data": st.column_config.DateColumn("Data", format="DD.MM.YYYY"),
+                    "Wynik": st.column_config.NumberColumn("Wynik", format="%.2f"),
+                    "Punkty": st.column_config.NumberColumn("Punkty WA"),
+                    "id_konkurencji": st.column_config.Column("id_konkurencji", disabled=True)
+                }
+            )
+
+    with tab_manage:
+   
+        all_disciplines = pbs_db.get_all_disciplines()
+        disc_map = {d['nazwa']: d['id_konkurencji'] for d in all_disciplines}
+        
+        selected_disc_name = st.selectbox("Wybierz konkurencję", options=list(disc_map.keys()))
+        selected_disc_id = disc_map[selected_disc_name]
+
+        existing_record = next((r for r in records if r['id_konkurencji'] == selected_disc_id), None)
+
+        if existing_record:
+            default_wynik = float(existing_record['Wynik'])
+            default_data = existing_record['Data']
+            default_punkty = int(existing_record['Punkty'])
+            btn_label = "Zaktualizuj rekord"
+        else:
+            default_wynik = 0.0
+            default_data = datetime.date.today()
+            default_punkty = 0
+            btn_label = "Dodaj rekord"
+
+        with st.form("pb_form"):
+            c1, c2 = st.columns(2)
+            with c1:
+                val_wynik = st.number_input("Wynik (s lub m)", min_value=0.0, value=default_wynik, step=0.01, format="%.2f")
+                val_punkty = st.number_input("Punkty World Athletics", min_value=0, max_value=2000, value=default_punkty, step=1)
+            with c2:
+                val_data = st.date_input("Data uzyskania", value=default_data, max_value=datetime.date.today())
+
+            st.divider()
+            
+            
+            submitted = st.form_submit_button(btn_label, use_container_width=True, type="primary")
+            
+            if submitted:
+                if val_wynik <= 0:
+                    st.error("Wynik musi być większy od 0!")
+                else:
+                    success, msg = pbs_db.upsert_personal_best(
+                        id_zawodnika, selected_disc_id, val_wynik, val_data, val_punkty
+                    )
+                    if success:
+                        st.success("Zapisano pomyślnie!")
+                        st.rerun()
+                    else:
+                        st.error(f"Błąd bazy danych: {msg}")
+
+      
+        if existing_record:
+            st.divider()
+            if st.button("🗑️ Usuń ten rekord", type="secondary", use_container_width=True):
+                success, msg = pbs_db.delete_personal_best(id_zawodnika, selected_disc_id)
+                if success:
+                    st.warning("Rekord został usunięty.")
+                    st.rerun()
+                else:
+                    st.error(f"Błąd: {msg}")
 def reset_filters():
     st.session_state["ath_nazwisko"] = ""
     st.session_state["ath_imie"] = ""
@@ -202,5 +286,8 @@ render_crud_view(
     id_column_name="id_zawodnika",
     display_columns_for_delete=["Imię", "Nazwisko"],
     search_columns=[], 
-    delete_message="zawodników?"
+    delete_message="zawodników?",
+    optional_column_modal_func=show_pb_modal,
+    optional_column_modal_text="Pokaż rekordy Życiowe"
 )
+
