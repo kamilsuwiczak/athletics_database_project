@@ -1,24 +1,33 @@
 import streamlit as st
-import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
 def get_competition_types(filter_by=None, search_term=None):
     conn = get_connection()
+    
+    base_query = """
+        SELECT id_typu_zawodow, 
+               nazwa_typu
+        FROM Typy_zawodow
+    """
+    
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if filter_by == 'name':
-            query = """
-            SELECT id_typu_zawodow, nazwa_typu
-            FROM Typy_zawodow
-            WHERE nazwa_typu ILIKE %s
-            ORDER BY nazwa_typu ASC
-            """
-            param = f"%{search_term}%"
-            cur.execute(query, (param,))
+        if not filter_by or not search_term:
+            cur.execute(base_query + " ORDER BY nazwa_typu ASC")
         else:
-            cur.execute("SELECT id_typu_zawodow, nazwa_typu FROM Typy_zawodow ORDER BY nazwa_typu ASC")
+            filters = {
+                'nazwa_typu': ("nazwa_typu ILIKE %s", f"%{search_term}%")
+            }
+            
+            if filter_by in filters:
+                where_clause, params = filters[filter_by]
+                query = f"{base_query} WHERE {where_clause} ORDER BY nazwa_typu ASC"
+                cur.execute(query, (params,))
+            else:
+                cur.execute(base_query + " ORDER BY nazwa_typu ASC")
+                
         return cur.fetchall()
-        
+    
 def add_competition_type(nazwa_typu):
     conn = get_connection()
     try:

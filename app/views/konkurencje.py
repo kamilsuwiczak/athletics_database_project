@@ -2,7 +2,7 @@ import streamlit as st
 import database_mgm_func.disciplines as disciplines_db
 from components.data_manager import render_crud_view
 
-@st.dialog("Dodaj nową konkurencję") # Poprawiłem tytuł z "państwo"
+@st.dialog("Dodaj nową konkurencję")
 def add_modal():
     with st.form("form_dodaj_modal"):
         nazwa = st.text_input("Nazwa").strip()
@@ -22,7 +22,7 @@ def add_modal():
 
 @st.dialog("Edytuj konkurencję")
 def edit_modal(id_konkurencji):
-    # Używamy klucza "id", który dodaliśmy do filtrów w backendzie
+    
     wynik = disciplines_db.get_disciplines("id", id_konkurencji)
     if not wynik:
         st.error("Nie znaleziono konkurencji.")
@@ -30,7 +30,6 @@ def edit_modal(id_konkurencji):
     dyscyplina = wynik[0]
 
     with st.form("form_edit"):
-        # Ważne: klucze w słowniku to teraz "nazwa" i "rodzaj" (małe litery, bez aliasów)
         nazwa = st.text_input("Nazwa", value=dyscyplina["nazwa"]).strip()
         rodzaj = st.text_input("Rodzaj", value=dyscyplina["rodzaj"]).strip()
         
@@ -60,7 +59,6 @@ render_crud_view(
     db_delete_func=disciplines_db.delete_disciplines,
     add_modal_func=add_modal,
     edit_modal_func=edit_modal,
-    # Tutaj też używamy małych liter, bo takie klucze teraz zwraca baza
     display_columns_for_delete=["nazwa", "rodzaj"],
     id_column_name="id_konkurencji",
     search_columns=search_cfg,
