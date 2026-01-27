@@ -3,14 +3,18 @@ import datetime
 import database_mgm_func.athletes as athletes_db
 import database_mgm_func.countries as countries_db
 import database_mgm_func.coaches as coaches_db
+import database_mgm_func.athlete_representatives as athlete_reps_db
 from components.data_manager import render_crud_view
+
 
 @st.dialog("Dodaj nowego zawodnika")
 def add_modal():
     lista_panstw = countries_db.get_countries()
     wszyscy_trenerzy = coaches_db.get_coaches()
+    wszyscy_przedstawiciele = athlete_reps_db.get_athlete_representatives()
 
     trenerzy_dict = {f"{t['Imię']} {t['Nazwisko']}": t['id_trenera'] for t in wszyscy_trenerzy}
+    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_przedstawiciela'] for r in wszyscy_przedstawiciele}
     
     with st.form("form_dodaj_modal"):
         imie = st.text_input("Imię").strip()
@@ -30,59 +34,92 @@ def add_modal():
             placeholder="Brak"
         )
         
+        przedstawiciel_nazwa = st.selectbox("Przedstawiciel", options=["Brak"] + list(przedstawiciele_dict.keys()))
+        
         if st.form_submit_button("Zapisz w bazie", use_container_width=True):
             if imie == "" or nazwisko == "":
                 st.error("Imię i nazwisko nie mogą być puste.")
-                return
-    
-            id_panstwa = next(row["id_panstwa"] for row in lista_panstw if row["nazwa"] == panstwo_nazwa)
-            
-
-            success_ath, result = athletes_db.add_athlete(imie, nazwisko, data_ur, plec, id_panstwa)
-            
-            if success_ath:
-                new_athlete_id = result 
-                wybrane_trener_ids = [trenerzy_dict[label] for label in wybrane_etykiety]
-                if wybrane_trener_ids:
-                    athletes_db.update_athlete_coaches(new_athlete_id, wybrane_trener_ids)
-                
-                st.success("Dodano zawodnika!")
-                st.rerun() 
             else:
-                st.error(result) 
+                id_panstwa = next(row["id_panstwa"] for row in lista_panstw if row["nazwa"] == panstwo_nazwa)
+                
+                id_reprezentanta = None
+                if przedstawiciel_nazwa != "Brak":
+                    id_reprezentanta = przedstawiciele_dict[przedstawiciel_nazwa]
+
+                success_ath, result = athletes_db.add_athlete(imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta)
+                
+                if success_ath:
+                    new_athlete_id = result 
+                    wybrane_trener_ids = [trenerzy_dict[label] for label in wybrane_etykiety]
+                    if wybrane_trener_ids:
+                        athletes_db.update_athlete_coaches(new_athlete_id, wybrane_trener_ids)
+                    
+                    st.success("Dodano zawodnika!")
+                    st.rerun() 
+                else:
+                    st.error(result) 
+
 
 @st.dialog("Edytuj zawodnika")
 def edit_modal(id_zawodnika):
-    zawodnik = athletes_db.get_athletes(filter_by='id', search_term=id_zawodnika)[0]
+    zawodnik_list = athletes_db.get_athletes(filter_by='id', search_term=id_zawodnika)
+    if not zawodnik_list:
+        st.error("Nie znaleziono danych zawodnika.")
+        return
+    zawodnik = zawodnik_list[0]
+
     lista_panstw = countries_db.get_countries()
     wszyscy_trenerzy = coaches_db.get_coaches()
+    wszyscy_przedstawiciele = athlete_reps_db.get_athlete_representatives()
     
     trenerzy_dict = {f"{t['Imię']} {t['Nazwisko']}": t['id_trenera'] for t in wszyscy_trenerzy}
+    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_przedstawiciela'] for r in wszyscy_przedstawiciele}
+    
     aktualne_ids = athletes_db.get_athlete_coaches_ids(id_zawodnika)
     domyslne_etykiety = [label for label, id_t in trenerzy_dict.items() if id_t in aktualne_ids]
 
     with st.form("form_edit"):
-        imie = st.text_input("Imię", value=zawodnik["Imię"]).strip()
-        nazwisko = st.text_input("Nazwisko", value=zawodnik["Nazwisko"]).strip()
+        imie = st.text_input("Imię", value=zawodnik["Imię"], key=f"e_imie_{id_zawodnika}").strip()
+        nazwisko = st.text_input("Nazwisko", value=zawodnik["Nazwisko"], key=f"e_nazw_{id_zawodnika}").strip()
         
         col1, col2 = st.columns(2)
         with col1:
-            data_ur = st.date_input("Data urodzenia", value=zawodnik["Data urodzenia"])
+            data_ur = st.date_input("Data urodzenia", value=zawodnik["Data urodzenia"], key=f"e_data_{id_zawodnika}")
         with col2:
             plec_options = ["K", "M"]
-            plec = st.selectbox("Płeć", plec_options, index=plec_options.index(zawodnik["Płeć"]))
+            plec = st.selectbox(
+                "Płeć", 
+                plec_options, 
+                index=plec_options.index(zawodnik["Płeć"]), 
+                key=f"e_plec_{id_zawodnika}"
+            )
             
         panstwo_nazwa = st.selectbox(
             "Państwo", 
             options=[row["nazwa"] for row in lista_panstw], 
-            index=[row["nazwa"] for row in lista_panstw].index(zawodnik["Kraj"])
+            index=[row["nazwa"] for row in lista_panstw].index(zawodnik["Kraj"]),
+            key=f"e_kraj_{id_zawodnika}"
         )
 
         wybrane_etykiety = st.multiselect(
             "Wybierz trenerów prowadzących",
             options=list(trenerzy_dict.keys()),
             default=domyslne_etykiety,
-            placeholder="Brak"
+            placeholder="Brak",
+            key=f"e_trenerzy_{id_zawodnika}"
+        )
+
+        idx_rep = 0
+        current_rep_str = zawodnik.get("Przedstawiciel")
+        
+        if current_rep_str and current_rep_str in przedstawiciele_dict:
+            idx_rep = list(przedstawiciele_dict.keys()).index(current_rep_str) + 1
+
+        przedstawiciel_nazwa = st.selectbox(
+            "Przedstawiciel", 
+            options=["Brak"] + list(przedstawiciele_dict.keys()), 
+            index=idx_rep,
+            key=f"e_rep_{id_zawodnika}"
         )
 
         st.divider()
@@ -90,8 +127,15 @@ def edit_modal(id_zawodnika):
         if st.form_submit_button("Zapisz zmiany", use_container_width=True, type="primary"):
             if imie and nazwisko:
                 id_panstwa = next(row["id_panstwa"] for row in lista_panstw if row["nazwa"] == panstwo_nazwa)
-         
-                success_ath, err_ath = athletes_db.update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa)
+             
+                id_reprezentanta = None
+                if przedstawiciel_nazwa != "Brak":
+                    id_reprezentanta = przedstawiciele_dict[przedstawiciel_nazwa]
+
+            
+                success_ath, err_ath = athletes_db.update_athlete(
+                    id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta
+                )
                 
                 wybrane_trener_ids = [trenerzy_dict[label] for label in wybrane_etykiety]
                 success_rel, err_rel = athletes_db.update_athlete_coaches(id_zawodnika, wybrane_trener_ids)
@@ -103,6 +147,7 @@ def edit_modal(id_zawodnika):
                     st.error(f"Błąd: {err_ath or ''} {err_rel or ''}")
             else:
                 st.error("Imię i nazwisko są wymagane!")
+
 
 def reset_filters():
     st.session_state["ath_nazwisko"] = ""
@@ -116,8 +161,7 @@ lista_p = countries_db.get_countries()
 panstwa_map = {row["nazwa"]: row["id_panstwa"] for row in lista_p}
 
 with st.sidebar:
-    st.header("🔍 Filtrowanie")
-    st.info("Naciśnij Enter w polu tekstowym, aby zatwierdzić filtr.")
+    st.header("🔍 Filtruj zawodników")
    
     f_nazwisko = st.text_input("Nazwisko", placeholder="np. Kowalski", key="ath_nazwisko")
     f_imie = st.text_input("Imię", placeholder="np. Jan", key="ath_imie")

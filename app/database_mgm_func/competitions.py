@@ -2,44 +2,58 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_competitions(filter_by=None, search_term=None):
+def get_competitions(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
     
+    # 1. Bazowe zapytanie z JOINami
+    # Aliasy muszą być zgodne z tym, co wyświetlasz w tabeli (np. "Typ", "Kraj")
     base_query = """
-        SELECT 
-            z.id_zawody,
-            z.nazwa,
-            tz.nazwa_typu AS "Typ",
-            p.nazwa AS "Kraj",
-            s.nazwa AS "Stadion",
-            z.data_rozpoczecia AS "Start",
-            z.data_zakonczenia AS "Koniec"
+        SELECT z.id_zawody,
+               z.nazwa,
+               tz.nazwa_typu AS "Typ",
+               p.nazwa AS "Kraj",
+               s.nazwa AS "Stadion",
+               z.data_rozpoczecia AS "Start",
+               z.data_zakonczenia AS "Koniec"
         FROM Zawody z
         JOIN Typy_zawodow tz ON z.id_typu_zawodow = tz.id_typu_zawodow
         JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
         JOIN Stadiony s ON z.id_stadionu = s.id_stadionu
     """
     
-    with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if not filter_by or not search_term:
-            cur.execute(base_query + " ORDER BY z.data_rozpoczecia DESC")
-        else:
-            filters = {
-                'nazwa': ("z.nazwa ILIKE %s", f"%{search_term}%"),
-                'typ': ("tz.nazwa_typu ILIKE %s", f"%{search_term}%"),
-                'kraj': ("p.nazwa ILIKE %s", f"%{search_term}%"),
-                'id': ("z.id_zawody = %s", search_term),
-                'stadion': ("s.nazwa ILIKE %s", f"%{search_term}%")
-            }
+    conditions = []
+    params = []
 
-            if filter_by in filters:
-                where_clause, params = filters[filter_by]
-                query = f"{base_query} WHERE {where_clause} ORDER BY z.data_rozpoczecia DESC"
-                cur.execute(query, (params,))
-            else:
-                cur.execute(base_query + " ORDER BY z.data_rozpoczecia DESC")
-                
-        return cur.fetchall()
+    if filter_by == 'id' and search_term:
+        conditions.append("z.id_zawody = %s")
+        params.append(search_term)
+
+    if advanced_filters.get('f_nazwa'):
+        conditions.append("z.nazwa ILIKE %s")
+        params.append(f"%{advanced_filters['f_nazwa']}%")
+
+    if advanced_filters.get('f_id_typu'):
+        conditions.append("z.id_typu_zawodow = %s")
+        params.append(advanced_filters['f_id_typu'])
+
+    if advanced_filters.get('f_id_panstwa'):
+        conditions.append("z.id_panstwa = %s")
+        params.append(advanced_filters['f_id_panstwa'])
+
+    if advanced_filters.get('f_rok'):
+        conditions.append("EXTRACT(YEAR FROM z.data_rozpoczecia) = %s")
+        params.append(advanced_filters['f_rok'])
+
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    full_query = base_query + where_clause + " ORDER BY z.data_rozpoczecia DESC"
+    
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        try:
+            cur.execute(full_query, params)
+            return cur.fetchall()
+        except Exception as e:
+            print(f"SQL Error: {e}")
+            return []
 
 def get_competition_by_id(id_zawody):
     conn = get_connection()

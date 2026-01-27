@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_results(filter_by=None, search_term=None):
+def get_results(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
     base_query = """
         SELECT w.id_wyniku,
@@ -10,38 +10,41 @@ def get_results(filter_by=None, search_term=None):
                k.nazwa AS "Konkurencja",
                zw.nazwa AS "Zawody",
                s.status_wyniku AS "Status",
-               w.rezultat AS "Rezultat",
-               w.miejsce AS "Miejsce",
-               w.data_rezultatu AS "Data"
+               w.rezultat AS "Rezultat", w.miejsce AS "Miejsce", w.data_rezultatu AS "Data"
         FROM Wyniki w
         JOIN Zawodnicy z ON w.id_zawodnika = z.id_zawodnika
         JOIN Konkurencje k ON w.id_konkurencji = k.id_konkurencji
         JOIN Zawody zw ON w.id_zawody = zw.id_zawody
         JOIN Statusy_wynikow s ON w.id_statusu = s.id_statusu
     """
-    
+    conditions = []
+    params = []
+
+    if filter_by == 'id':
+        conditions.append("w.id_wyniku = %s")
+        params.append(search_term)
+
+    if advanced_filters.get('f_zawodnik'): 
+        conditions.append("(z.nazwisko ILIKE %s OR z.imie ILIKE %s)")
+        params.extend([f"%{advanced_filters['f_zawodnik']}%", f"%{advanced_filters['f_zawodnik']}%"])
+
+    if advanced_filters.get('f_id_konkurencji'):
+        conditions.append("w.id_konkurencji = %s")
+        params.append(advanced_filters['f_id_konkurencji'])
+
+    if advanced_filters.get('f_id_zawody'):
+        conditions.append("w.id_zawody = %s")
+        params.append(advanced_filters['f_id_zawody'])
+        
+    if advanced_filters.get('f_miejsce_min'):
+        conditions.append("w.miejsce <= %s") 
+        params.append(advanced_filters['f_miejsce_min'])
+
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    full_query = base_query + where_clause + " ORDER BY w.data_rezultatu DESC"
+
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if not filter_by or not search_term:
-            cur.execute(base_query + " ORDER BY w.data_rezultatu DESC, w.id_wyniku DESC")
-        else:
-            filters = {
-                'zawodnik': ("(z.nazwisko ILIKE %s OR z.imie ILIKE %s)", [f"%{search_term}%", f"%{search_term}%"]),
-                'zawody': ("zw.nazwa ILIKE %s", f"%{search_term}%"),
-                'konkurencja': ("k.nazwa ILIKE %s", f"%{search_term}%"),
-                'id': ("w.id_wyniku = %s", search_term)
-            }
-
-            if filter_by in filters:
-                where_clause, params = filters[filter_by]
-                query = f"{base_query} WHERE {where_clause} ORDER BY w.data_rezultatu DESC"
-                
-                if isinstance(params, list):
-                    cur.execute(query, tuple(params))
-                else:
-                    cur.execute(query, (params,))
-            else:
-                cur.execute(base_query + " ORDER BY w.data_rezultatu DESC")
-
+        cur.execute(full_query, params)
         return cur.fetchall()
 
 def add_result(id_zawodnika, id_konkurencji, id_zawody, id_statusu, rezultat, miejsce, data):

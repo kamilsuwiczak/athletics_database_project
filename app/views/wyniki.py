@@ -131,20 +131,48 @@ def edit_modal(id_wyniku):
                 st.error(f"Błąd: {error}")
 
 
-search_cfg = [
-    {"label": "Nazwisko Zawodnika", "value": "zawodnik"},
-    {"label": "Nazwa Zawodów", "value": "zawody"},
-    {"label": "Konkurencja", "value": "konkurencja"}
-]
+def reset_filters():
+    st.session_state["result_zawodnik"] = ""
+    st.session_state["result_konkurencja"] = ""
+    st.session_state["result_zawody"] = ""
+    st.session_state["result_tylko_medale"] = False
+
+
+disc_list = disciplines_db.get_disciplines() 
+comp_list = competitions_db.get_competitions() 
+
+with st.sidebar:
+    st.header("🔍 Filtruj Wyniki")
+    f_zawodnik = st.text_input("Nazwisko zawodnika", placeholder="np. Kowalski", key="result_zawodnik")
+    
+    
+    disc_map = {d['nazwa']: d['id_konkurencji'] for d in disc_list}
+    sel_disc = st.selectbox("Konkurencja", ["Wszystkie"] + list(disc_map.keys()), key="result_konkurencja")
+    
+    comp_map = {c['nazwa']: c['id_zawody'] for c in comp_list}
+    sel_comp = st.selectbox("Zawody", ["Wszystkie"] + list(comp_map.keys()), key="result_zawody")
+    
+    tylko_medale = st.checkbox("Tylko miejsca 1-3", key="result_tylko_medale")
+    st.button("Wyczyść filtry", icon="🗑️", use_container_width=True, on_click=reset_filters)
+    
+f_id_disc = disc_map[sel_disc] if sel_disc != "Wszystkie" else None
+f_id_comp = comp_map[sel_comp] if sel_comp != "Wszystkie" else None
+f_miejsce = 3 if tylko_medale else None
+
+data_fetcher = lambda filter_by=None, search_term=None: results_db.get_results(
+    filter_by=filter_by, search_term=search_term,
+    f_zawodnik=f_zawodnik, f_id_konkurencji=f_id_disc, 
+    f_id_zawody=f_id_comp, f_miejsce_min=f_miejsce
+)
 
 render_crud_view(
     header_title="Zarządzanie Wynikami",
-    db_fetch_func=results_db.get_results,
+    db_fetch_func=data_fetcher,
     db_delete_func=results_db.delete_results,
     add_modal_func=add_modal,
     edit_modal_func=edit_modal,
     id_column_name="id_wyniku",
     display_columns_for_delete=["Zawodnik", "Konkurencja", "Rezultat"],
-    search_columns=search_cfg,
+    search_columns=[],
     delete_message="wyników?"
 )

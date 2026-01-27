@@ -19,7 +19,7 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
                z.plec AS "Płeć", 
                p.nazwa AS "Kraj",
                COALESCE(STRING_AGG(t.imie || ' ' || t.nazwisko, ', '), 'Brak') AS "Trenerzy",
-               r.adres_email AS "Email reprezentanta"
+               r.imie || ' ' || r.nazwisko AS "Przedstawiciel"
         FROM Zawodnicy z 
         JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
         LEFT JOIN Trenerzy_zawodnicy zt ON z.id_zawodnika = zt.id_zawodnika
@@ -34,11 +34,15 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
         search_mapping = {
             'imie': "z.imie ILIKE %s",
             'nazwisko': "z.nazwisko ILIKE %s",
-            'kraj': "p.nazwa ILIKE %s"
+            'kraj': "p.nazwa ILIKE %s",
+            'id': "z.id_zawodnika = %s"
         }
         if filter_by in search_mapping:
             conditions.append(search_mapping[filter_by])
-            params.append(f"%{search_term}%")
+            if filter_by == 'id':
+                params.append(search_term)
+            else:
+                params.append(f"%{search_term}%")
 
     
     if advanced_filters.get('f_imie'):
@@ -65,10 +69,9 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
         conditions.append("EXTRACT(YEAR FROM z.data_urodzenia) <= %s")
         params.append(advanced_filters['f_rok_ur_max'])
 
-    # 4. SKŁADANIE ZAPYTANIA
     where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
-    # Group By jest konieczne przy użyciu funkcji agregującej STRING_AGG
-    group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa, r.adres_email"
+
+    group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa, r.imie, r.nazwisko"
     order_by_clause = " ORDER BY z.nazwisko ASC, z.imie ASC"
 
     full_query = base_query + where_clause + group_by_clause + order_by_clause
@@ -78,19 +81,19 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
             cur.execute(full_query, params)
             return cur.fetchall()
         except Exception as e:
-            # Warto logować błędy w konsoli
+    
             print(f"SQL Error: {e}") 
             return []
 
-def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa):
+def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
     conn = get_connection()
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, plec, id_panstwa)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, plec, id_panstwa, id_reprezentanta)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id_zawodnika
-            """, (imie, nazwisko, data_ur, plec, id_panstwa))
+            """, (imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta))
             
             new_id = cur.fetchone()[0]
             conn.commit()

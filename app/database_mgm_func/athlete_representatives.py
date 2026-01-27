@@ -3,25 +3,41 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_athlete_representatives(filter_by = None, search_term = None):
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            if filter_by == 'name_surname':
-                query = """
-                SELECT ar.id_reprezentanta, ar.imie, ar.nazwisko
-                FROM Reprezentanci_Zawodnikow ar
-                WHERE ar.nazwisko ILIKE %s
-                ORDER BY ar.nazwisko;
-                """
-                param = f"%{search_term}%"
-                cur.execute(query, (param,))
-            else:
-                cur.execute("""
-                SELECT ar.id_reprezentanta, ar.imie, ar.nazwisko
-                FROM Reprezentanci_Zawodnikow ar
-                ORDER BY ar.nazwisko;
-                """)
-            return cur.fetchall()
+def get_athlete_representatives(filter_by=None, search_term=None):
+    """
+    Pobiera listę przedstawicieli.
+    Zwraca słowniki z kluczami: id_przedstawiciela, Imię, Nazwisko
+    """
+    conn = get_connection()
+    
+    # Aliasujemy kolumny tak, aby pasowały do Twojego kodu w views/athletes.py
+    # (id_reprezentanta -> id_przedstawiciela)
+    base_query = """
+        SELECT id_reprezentanta AS id_przedstawiciela,
+               imie AS "Imię",
+               nazwisko AS "Nazwisko",
+               adres_email AS "Email"
+        FROM Reprezentanci_zawodnikow
+    """
+    
+    conditions = []
+    params = []
+
+    # Opcjonalne filtrowanie (dla spójności z resztą systemu)
+    if filter_by and search_term:
+        if filter_by == 'id':
+            conditions.append("id_reprezentanta = %s")
+            params.append(search_term)
+        elif filter_by == 'nazwisko':
+            conditions.append("nazwisko ILIKE %s")
+            params.append(f"%{search_term}%")
+
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    full_query = base_query + where_clause + " ORDER BY nazwisko ASC"
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(full_query, params)
+        return cur.fetchall()
 
 def add_athlete_representative(name, surname):
     with get_connection() as conn:
