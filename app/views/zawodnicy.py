@@ -15,7 +15,7 @@ def add_modal():
     wszyscy_przedstawiciele = athlete_reps_db.get_athlete_representatives()
 
     trenerzy_dict = {f"{t['Imię']} {t['Nazwisko']}": t['id_trenera'] for t in wszyscy_trenerzy}
-    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_przedstawiciela'] for r in wszyscy_przedstawiciele}
+    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_reprezentanta'] for r in wszyscy_przedstawiciele}
     
     with st.form("form_dodaj_modal"):
         imie = st.text_input("Imię").strip()
@@ -74,7 +74,7 @@ def edit_modal(id_zawodnika):
     wszyscy_przedstawiciele = athlete_reps_db.get_athlete_representatives()
     
     trenerzy_dict = {f"{t['Imię']} {t['Nazwisko']}": t['id_trenera'] for t in wszyscy_trenerzy}
-    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_przedstawiciela'] for r in wszyscy_przedstawiciele}
+    przedstawiciele_dict = {f"{r['Imię']} {r['Nazwisko']}": r['id_reprezentanta'] for r in wszyscy_przedstawiciele}
     
     aktualne_ids = athletes_db.get_athlete_coaches_ids(id_zawodnika)
     domyslne_etykiety = [label for label, id_t in trenerzy_dict.items() if id_t in aktualne_ids]
