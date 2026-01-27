@@ -53,21 +53,34 @@ def edit_modal(id_trenera):
             else:
                 st.error("Wszystkie pola są wymagane!")
 
+def reset_coach_filters():
+    st.session_state["coach_imie"] = ""
+    st.session_state["coach_nazwisko"] = ""
+    st.session_state["coach_email"] = ""
 
-search_cfg = [
-    {"label": "Imię", "value": "imie"},
-    {"label": "Nazwisko", "value": "nazwisko"},
-    {"label": "Email", "value": "email"}
-]
+with st.sidebar:
+    st.header("🔍 Filtruj Trenerów")
+    f_nazwisko = st.text_input("Nazwisko", placeholder="np. Nowak", key="coach_nazwisko")
+    f_imie = st.text_input("Imię", placeholder="np. Adam", key="coach_imie")
+    f_email = st.text_input("Email", placeholder="@gmail.com", key="coach_email")
+    
+    st.button("Wyczyść filtry", use_container_width=True, on_click=reset_coach_filters)
+       
+
+
+data_fetcher = lambda filter_by=None, search_term=None: coaches_db.get_coaches(
+    filter_by=filter_by, search_term=search_term,
+    f_imie=f_imie, f_nazwisko=f_nazwisko, f_email=f_email
+)
 
 render_crud_view(
     header_title="Zarządzanie Trenerami",
-    db_fetch_func=coaches_db.get_coaches,  
+    db_fetch_func=data_fetcher,  
     db_delete_func=coaches_db.delete_coaches,
     add_modal_func=add_modal,
     edit_modal_func=edit_modal,
     id_column_name="id_trenera",
     display_columns_for_delete=["Imię", "Nazwisko", "Adres email"],
-    search_columns=search_cfg,
+    search_columns=[],
     delete_message="trenerów?"
 )

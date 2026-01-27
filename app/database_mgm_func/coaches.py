@@ -4,10 +4,13 @@ from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
 
-def get_coaches(filter_by=None, search_term=None):
+def get_coaches(filter_by=None, search_term=None, **advanced_filters):
+    """
+    Pobiera listę trenerów z obsługą filtrów podstawowych i zaawansowanych (sidebar).
+    """
     conn = get_connection()
     
-    # Bazowe zapytanie - stałe nazwy kolumn dla widoku
+    # Bazowe zapytanie
     base_query = """
         SELECT id_trenera, 
                imie AS "Imię", 
@@ -16,30 +19,48 @@ def get_coaches(filter_by=None, search_term=None):
         FROM Trenerzy
     """
     
-    with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        if not filter_by or not search_term:
-            # Domyślne sortowanie
-            cur.execute(base_query + " ORDER BY id_trenera DESC")
+    conditions = []
+    params = []
+
+    # 1. Obsługa starego searchbara (jeśli render_crud_view go używa)
+    if filter_by and search_term:
+        mapping = {
+            'imie': "imie ILIKE %s",
+            'nazwisko': "nazwisko ILIKE %s",
+            'email': "adres_email ILIKE %s",
+            'id': "id_trenera = %s"
+        }
+        if filter_by in mapping:
+            conditions.append(mapping[filter_by])
+            params.append(search_term if filter_by == 'id' else f"%{search_term}%")
+
+    # 2. Obsługa Sidebaru (Advanced Filters)
+    # Tu naprawiamy błąd: odczytujemy argumenty przekazane z widoku
+    if advanced_filters.get('f_imie'):
+        conditions.append("imie ILIKE %s")
+        params.append(f"%{advanced_filters['f_imie']}%")
         
-        else:
-            # Mapowanie filtrów (musi pasować do search_cfg w widoku)
-            filters = {
-                'imie': ("imie ILIKE %s", f"%{search_term}%"),
-                'nazwisko': ("nazwisko ILIKE %s", f"%{search_term}%"),
-                'email': ("adres_email ILIKE %s", f"%{search_term}%"),
-                # Potrzebne do pobrania jednego trenera w edit_modal:
-                'id': ("id_trenera = %s", search_term) 
-            }
+    if advanced_filters.get('f_nazwisko'):
+        conditions.append("nazwisko ILIKE %s")
+        params.append(f"%{advanced_filters['f_nazwisko']}%")
+        
+    if advanced_filters.get('f_email'):
+        conditions.append("adres_email ILIKE %s")
+        params.append(f"%{advanced_filters['f_email']}%")
 
-            if filter_by in filters:
-                where_clause, params = filters[filter_by]
-                query = f"{base_query} WHERE {where_clause} ORDER BY nazwisko ASC"
-                
-                cur.execute(query, (params,))
-            else:
-                cur.execute(base_query + " ORDER BY id_trenera DESC")
+    # 3. Składanie zapytania
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    full_query = base_query + where_clause + " ORDER BY nazwisko ASC, imie ASC"
 
-        return cur.fetchall()
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        try:
+            cur.execute(full_query, params)
+            return cur.fetchall()
+        except Exception as e:
+            print(f"SQL Error: {e}")
+            return []
+    
+
 def add_coach(imie, nazwisko, adres_email):
     conn = get_connection()
     try:

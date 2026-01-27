@@ -3,7 +3,12 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
 
-def get_athletes(filter_by=None, search_term=None):
+
+def get_athletes(filter_by=None, search_term=None, **advanced_filters):
+    """
+    Pobiera zawodników z uwzględnieniem filtrów podstawowych (search_term) 
+    oraz zaawansowanych (**advanced_filters).
+    """
     conn = get_connection()
 
     base_query = """
@@ -21,43 +26,78 @@ def get_athletes(filter_by=None, search_term=None):
         LEFT JOIN Trenerzy t ON zt.id_trenera = t.id_trenera
         LEFT JOIN Reprezentanci_zawodnikow r ON z.id_reprezentanta = r.id_reprezentanta
     """
+
+    conditions = []
+    params = []
+
+    if filter_by and search_term:
+        search_mapping = {
+            'imie': "z.imie ILIKE %s",
+            'nazwisko': "z.nazwisko ILIKE %s",
+            'kraj': "p.nazwa ILIKE %s"
+        }
+        if filter_by in search_mapping:
+            conditions.append(search_mapping[filter_by])
+            params.append(f"%{search_term}%")
+
     
-    with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa, r.adres_email"
+    if advanced_filters.get('f_imie'):
+        conditions.append("z.imie ILIKE %s")
+        params.append(f"%{advanced_filters['f_imie']}%")
+
+    if advanced_filters.get('f_nazwisko'):
+        conditions.append("z.nazwisko ILIKE %s")
+        params.append(f"%{advanced_filters['f_nazwisko']}%")
+
+    if advanced_filters.get('f_id_panstwa'):
+        conditions.append("z.id_panstwa = %s")
+        params.append(advanced_filters['f_id_panstwa'])
+
+    if advanced_filters.get('f_plec'):
+        conditions.append("z.plec = %s")
+        params.append(advanced_filters['f_plec'])
         
-        if not filter_by or not search_term:
-            cur.execute(base_query + group_by_clause + " ORDER BY z.id_zawodnika DESC")
-        else:
-            filters = {
-                'imie': ("z.imie ILIKE %s", f"%{search_term}%"),
-                'nazwisko': ("z.nazwisko ILIKE %s", f"%{search_term}%"),
-                'kod_iso': ("p.kod_iso ILIKE %s", f"%{search_term}%"),
-                'id': ("z.id_zawodnika = %s", search_term),
-                'trener': ("t.nazwisko ILIKE %s", f"%{search_term}%"),
-                'kraj': ("p.nazwa ILIKE %s", f"%{search_term}%")
-            }
+    if advanced_filters.get('f_rok_ur_min'):
+        conditions.append("EXTRACT(YEAR FROM z.data_urodzenia) >= %s")
+        params.append(advanced_filters['f_rok_ur_min'])
 
-            if filter_by in filters:
-                where_clause, params = filters[filter_by]
-                query = f"{base_query} WHERE {where_clause} {group_by_clause} ORDER BY z.nazwisko ASC"
-                cur.execute(query, (params,))
-            else:
-                cur.execute(base_query + group_by_clause + " ORDER BY z.id_zawodnika DESC")
+    if advanced_filters.get('f_rok_ur_max'):
+        conditions.append("EXTRACT(YEAR FROM z.data_urodzenia) <= %s")
+        params.append(advanced_filters['f_rok_ur_max'])
 
-        return cur.fetchall()
+    # 4. SKŁADANIE ZAPYTANIA
+    where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
+    # Group By jest konieczne przy użyciu funkcji agregującej STRING_AGG
+    group_by_clause = " GROUP BY z.id_zawodnika, p.nazwa, r.adres_email"
+    order_by_clause = " ORDER BY z.nazwisko ASC, z.imie ASC"
 
-def add_athlete(imie, nazwisko, data_ur, plec, kod_iso):
-    conn = get_connection() 
+    full_query = base_query + where_clause + group_by_clause + order_by_clause
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        try:
+            cur.execute(full_query, params)
+            return cur.fetchall()
+        except Exception as e:
+            # Warto logować błędy w konsoli
+            print(f"SQL Error: {e}") 
+            return []
+
+def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa):
+    conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute("CALL dodaj_zawodnika(%s, %s, %s, %s, %s)", 
-                        (imie, nazwisko, data_ur, plec, kod_iso))
+            cur.execute("""
+                INSERT INTO Zawodnicy (imie, nazwisko, data_urodzenia, plec, id_panstwa)
+                VALUES (%s, %s, %s, %s, %s)
+                RETURNING id_zawodnika
+            """, (imie, nazwisko, data_ur, plec, id_panstwa))
+            
+            new_id = cur.fetchone()[0]
             conn.commit()
-            return True, None
+            return True, new_id
     except Exception as e:
         conn.rollback()
-        error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-        return False, error_msg
+        return False, str(e)
 
 def update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
     conn = get_connection()
