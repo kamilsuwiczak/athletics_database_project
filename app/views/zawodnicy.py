@@ -157,7 +157,11 @@ def show_pb_modal(id_zawodnika):
 
     records = pbs_db.get_personal_bests(id_zawodnika)
     
+<<<<<<< HEAD
     tab_list, tab_manage = st.tabs(["Lista Rekordów", "➕ Dodaj / ✏️ Edytuj"])
+=======
+    tab_list, tab_manage = st.tabs(["Lista Rekordów", "Dodaj /Edytuj"])
+>>>>>>> 34a6d73d4ccd9bd0200b480d1db9d9d0fd84645a
 
     with tab_list:
         if not records:
@@ -261,7 +265,7 @@ with st.sidebar:
         f_rok_max = st.number_input("Do", min_value=1900, max_value=2030, value=None, placeholder="2005", key="ath_rok_max")
 
     st.divider()
-    st.button("Wyczyść filtry", icon="🗑️", use_container_width=True, on_click=reset_filters)
+    st.button("Wyczyść filtry", use_container_width=True, on_click=reset_filters)
         
 f_id_panstwa = panstwa_map[f_kraj_nazwa] if f_kraj_nazwa != "Wszystkie" else None
 f_plec_val = f_plec if f_plec != "Wszystkie" else None

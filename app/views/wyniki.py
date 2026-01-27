@@ -153,7 +153,7 @@ with st.sidebar:
     sel_comp = st.selectbox("Zawody", ["Wszystkie"] + list(comp_map.keys()), key="result_zawody")
     
     tylko_medale = st.checkbox("Tylko miejsca 1-3", key="result_tylko_medale")
-    st.button("Wyczyść filtry", icon="🗑️", use_container_width=True, on_click=reset_filters)
+    st.button("Wyczyść filtry", use_container_width=True, on_click=reset_filters)
     
 f_id_disc = disc_map[sel_disc] if sel_disc != "Wszystkie" else None
 f_id_comp = comp_map[sel_comp] if sel_comp != "Wszystkie" else None
