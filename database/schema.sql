@@ -50,7 +50,7 @@ CREATE TABLE Zawodnicy(
     nazwisko VARCHAR(50) NOT NULL,
     data_urodzenia DATE NOT NULL,
     plec VARCHAR(1) NOT NULL,
-    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa),
     id_reprezentanta INT NULL REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) ON DELETE SET NULL,
     CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE),
     CONSTRAINT plec_check CHECK (plec IN ('K', 'M')),
@@ -76,7 +76,7 @@ CREATE TABLE Trenerzy_zawodnicy(
     );
 
 CREATE TABLE Rekordy_swiata(
-    id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji) ON DELETE CASCADE,
+    id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji),
     rezultat NUMERIC(10,2) NOT NULL,
     data_rezultatu DATE NOT NULL,
     id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
@@ -88,7 +88,7 @@ CREATE TABLE Stadiony(
     id_stadionu SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
     miasto VARCHAR(100) NOT NULL,
-    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa),
     UNIQUE (nazwa)
 );
 CREATE TABLE Typy_zawodow(
@@ -100,11 +100,11 @@ CREATE TABLE Typy_zawodow(
 CREATE TABLE Zawody(
     id_zawody SERIAL PRIMARY KEY,
     nazwa VARCHAR(100) NOT NULL,
-    id_typu_zawodow  INT NOT NULL REFERENCES Typy_zawodow(id_typu_zawodow) ON DELETE CASCADE,
+    id_typu_zawodow  INT NOT NULL REFERENCES Typy_zawodow(id_typu_zawodow),
     data_rozpoczecia DATE NOT NULL,
     data_zakonczenia DATE NOT NULL,
-    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa) ON DELETE CASCADE,
-    id_stadionu INT NOT NULL REFERENCES Stadiony(id_stadionu) ON DELETE CASCADE,
+    id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa),
+    id_stadionu INT NOT NULL REFERENCES Stadiony(id_stadionu),
     CONSTRAINT data_rozpoczecia_check CHECK (data_rozpoczecia <= CURRENT_DATE),
     CONSTRAINT data_zakonczenia_check CHECK (data_zakonczenia >= data_rozpoczecia),
     UNIQUE (nazwa, data_rozpoczecia)

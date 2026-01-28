@@ -11,8 +11,8 @@ def get_countries(filter_by=None, search_term=None, **advanced_filters):
         SELECT id_panstwa, 
                nazwa, 
                kod_iso, 
-               kontynent, 
-               stolica 
+               COALESCE(kontynent, 'Brak') AS kontynent, 
+               COALESCE(stolica, 'Brak') AS stolica
         FROM Panstwa
     """
     
@@ -52,7 +52,7 @@ def update_country(id_panstwa, new_name, new_iso_code):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def add_country(name, iso_code):
     conn = get_connection()
@@ -63,7 +63,7 @@ def add_country(name, iso_code):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_countries(ids_to_delete):
     conn = get_connection()
@@ -74,4 +74,4 @@ def delete_countries(ids_to_delete):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)

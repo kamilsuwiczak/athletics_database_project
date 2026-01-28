@@ -286,7 +286,7 @@ render_crud_view(
     id_column_name="id_zawodnika",
     display_columns_for_delete=["Imię", "Nazwisko"],
     search_columns=[], 
-    delete_message="zawodników?",
+    delete_message="zawodników oraz powiązane z nimi rekordy?",
     optional_column_modal_func=show_pb_modal,
     optional_column_modal_text="Pokaż rekordy Życiowe"
 )

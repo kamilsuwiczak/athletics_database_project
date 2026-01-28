@@ -46,6 +46,8 @@ def add_modal():
             miejsce = st.number_input("Miejsce", min_value=1, step=1, value=None, placeholder="np. 1")
         with c3:
             data = st.date_input("Data", value=datetime.date.today(), max_value=datetime.date.today(), min_value=datetime.date(1900, 1, 1))
+        
+
 
         if st.form_submit_button("Zapisz wynik", type="primary", use_container_width=True):
        
@@ -55,7 +57,8 @@ def add_modal():
             id_stat = stat_map[sel_status]
             
             final_place = int(miejsce) if miejsce else None
-
+            
+            
             success, error = results_db.add_result(
                 id_z, id_disc, id_comp, id_stat, rezultat, final_place, data
             )

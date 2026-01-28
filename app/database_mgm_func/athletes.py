@@ -81,7 +81,7 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
         try:
             cur.execute(full_query, params)
             return cur.fetchall()
-        except Exception:
+        except Exception as e:
             return []
 
 
@@ -156,3 +156,55 @@ def update_athlete_coaches(id_zawodnika, list_of_coach_ids):
     except Exception as e:
         conn.rollback()
         return False, _short_db_error(e)
+    
+
+def get_all_competition_types():
+    """
+    Pobiera listę unikalnych nazw typów zawodów (np. 'Igrzyska Olimpijskie', 'Mistrzostwa Świata').
+    Potrzebne do listy rozwijanej w Streamlit.
+    """
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT DISTINCT nazwa_typu FROM Typy_zawodow ORDER BY nazwa_typu")
+            # Zwracamy płaską listę stringów
+            return [row[0] for row in cur.fetchall()]
+    except Exception as e:
+        return []
+
+def get_top_5_medalists_by_type(competition_type_name):
+    """
+    Zwraca TOP 5 zawodników z największą liczbą medali w danym typie zawodów.
+    Realizuje logikę funkcji SQL 'zlicz_medale_w_typie_zawodow' w formie zbiorczego zestawienia.
+    """
+    conn = get_connection()
+    
+    # Zapytanie realizuje to samo co Twoja funkcja PL/pgSQL, ale dla wszystkich naraz:
+    # 1. Łączy Wyniki -> Zawody -> Typy
+    # 2. Filtruje po nazwie typu (np. 'Igrzyska Olimpijskie')
+    # 3. Filtruje miejsca medalowe (1, 2, 3)
+    # 4. Grupuje po zawodniku i zlicza wyniki
+    # 5. Sortuje malejąco i bierze top 5
+    
+    query = """
+        SELECT 
+            z.imie || ' ' || z.nazwisko AS zawodnik,
+            COUNT(w.id_wyniku) AS liczba_medali
+        FROM Zawodnicy z
+        JOIN Wyniki w ON z.id_zawodnika = w.id_zawodnika
+        JOIN Zawody za ON w.id_zawody = za.id_zawody
+        JOIN Typy_zawodow tz ON za.id_typu_zawodow = tz.id_typu_zawodow
+        WHERE w.miejsce IN (1, 2, 3)
+          AND tz.nazwa_typu = %s
+        GROUP BY z.id_zawodnika, z.imie, z.nazwisko
+        ORDER BY liczba_medali DESC
+        LIMIT 5;
+    """
+    
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        try:
+            cur.execute(query, (competition_type_name,))
+            return cur.fetchall()
+        except Exception as e:
+            # Opcjonalnie: logowanie błędu print(e)
+            return []

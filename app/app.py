@@ -10,8 +10,8 @@ konkurencje_page = st.Page("views/konkurencje.py", title="Konkurencje")
 typy_zawodow_page = st.Page("views/typy_zawodow.py", title="Typy Zawodów")
 reprezentanci_page = st.Page("views/reprezentanci_zawodnikow.py", title="Przedstawiciele Zawodników")
 world_records_page = st.Page("views/rekordy_swiata.py", title="Rekordy Świata")
-# dashboard_page = st.Page("views/dashboard.py", title="Dashboard")
-pg = st.navigation([zawodnicy_page, wyniki_page, trenerzy_page, zawody_page, stadiony_page, world_records_page , panstwa_page, reprezentanci_page,konkurencje_page, typy_zawodow_page,])
+dashboard_page = st.Page("views/dashboard.py", title="Dashboard")
+pg = st.navigation([dashboard_page,zawodnicy_page, wyniki_page, trenerzy_page, zawody_page, stadiony_page, world_records_page , panstwa_page, reprezentanci_page,konkurencje_page, typy_zawodow_page,])
 st.set_page_config(page_title="System Atletyczny", layout="wide")
 
 
