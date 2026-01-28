@@ -23,5 +23,7 @@ def _short_db_error(e: Exception) -> str:
         return "Wartość liczbowa jest poza zakresem."
     if isinstance(e, errors.DatetimeFieldOverflow):
         return "Nieprawidłowa data."
+    
+    
 
     return "Wystąpił błąd bazy danych."

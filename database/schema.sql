@@ -120,13 +120,14 @@ CREATE TABLE Wyniki(
     id_zawodnika INT NOT NULL REFERENCES Zawodnicy(id_zawodnika) ON DELETE CASCADE,
     id_konkurencji INT NOT NULL REFERENCES Konkurencje(id_konkurencji) ON DELETE CASCADE,
     id_zawody INT NOT NULL REFERENCES Zawody(id_zawody) ON DELETE CASCADE,
-    id_statusu INT NOT NULL REFERENCES Statusy_wynikow(id_statusu) ON DELETE CASCADE,
+    id_statusu INT NOT NULL REFERENCES Statusy_wynikow(id_statusu),
     rezultat NUMERIC(10,2) NULL,
     miejsce INT NULL,
     data_rezultatu DATE NOT NULL,
     CONSTRAINT miejsce_check CHECK (miejsce > 0),
     CONSTRAINT rezultat_check_wyniki CHECK (rezultat >= 0),
     CONSTRAINT data_rezultatu_check_wyniki CHECK (data_rezultatu <= CURRENT_DATE),
+ 
     UNIQUE (id_zawodnika, id_konkurencji, id_zawody, id_statusu)
 );
 
@@ -189,3 +190,32 @@ BEGIN
     RETURN v_liczba_medali;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION waliduj_date_wyniku()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_start DATE;
+    v_end DATE;
+BEGIN
+    SELECT data_rozpoczecia, data_zakonczenia 
+    INTO v_start, v_end 
+    FROM Zawody 
+    WHERE id_zawody = NEW.id_zawody;
+
+    IF NEW.data_rezultatu > v_end THEN
+        RAISE EXCEPTION 'Data rezultatu (%) jest późniejsza niż data zakończenia zawodów (%)!', 
+            NEW.data_rezultatu, v_end;
+   
+    ELSIF NEW.data_rezultatu < v_start THEN
+        RAISE EXCEPTION 'Data rezultatu (%) jest wcześniejsza niż data rozpoczęcia zawodów (%)!', 
+            NEW.data_rezultatu, v_start;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_walidacja_dat_wyniku
+BEFORE INSERT OR UPDATE ON Wyniki
+FOR EACH ROW
+EXECUTE FUNCTION waliduj_date_wyniku();
