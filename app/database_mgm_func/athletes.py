@@ -167,7 +167,6 @@ def get_all_competition_types():
     try:
         with conn.cursor() as cur:
             cur.execute("SELECT DISTINCT nazwa_typu FROM Typy_zawodow ORDER BY nazwa_typu")
-            # Zwracamy płaską listę stringów
             return [row[0] for row in cur.fetchall()]
     except Exception as e:
         return []
@@ -178,13 +177,6 @@ def get_top_5_medalists_by_type(competition_type_name):
     Realizuje logikę funkcji SQL 'zlicz_medale_w_typie_zawodow' w formie zbiorczego zestawienia.
     """
     conn = get_connection()
-    
-    # Zapytanie realizuje to samo co Twoja funkcja PL/pgSQL, ale dla wszystkich naraz:
-    # 1. Łączy Wyniki -> Zawody -> Typy
-    # 2. Filtruje po nazwie typu (np. 'Igrzyska Olimpijskie')
-    # 3. Filtruje miejsca medalowe (1, 2, 3)
-    # 4. Grupuje po zawodniku i zlicza wyniki
-    # 5. Sortuje malejąco i bierze top 5
     
     query = """
         SELECT 
@@ -206,5 +198,4 @@ def get_top_5_medalists_by_type(competition_type_name):
             cur.execute(query, (competition_type_name,))
             return cur.fetchall()
         except Exception as e:
-            # Opcjonalnie: logowanie błędu print(e)
             return []
