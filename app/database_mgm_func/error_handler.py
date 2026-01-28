@@ -12,7 +12,17 @@ def _short_db_error(e: Exception) -> str:
     if isinstance(e, errors.NotNullViolation):
         return "Wymagane pole nie może być puste."
     if isinstance(e, errors.CheckViolation):
-        return "Wartość nie spełnia wymagań (reguła CHECK)."
+        
+        constraint_name = getattr(e.diag, "constraint_name", "")
+        
+        if constraint_name == "imie_check":
+            return "Niepoprawny format imienia (dozwolone tylko litery)."
+        if constraint_name == "nazwisko_check":
+            return "Niepoprawny format nazwiska (dozwolone tylko litery)."
+        if constraint_name == "plec_check":
+            return "Płeć musi być oznaczona jako 'K' lub 'M'."
+            
+        return "Wartość nie spełnia wymagań systemowych."
     if isinstance(e, errors.InvalidTextRepresentation):
         return "Nieprawidłowy format danych."
     if isinstance(e, errors.DatatypeMismatch):

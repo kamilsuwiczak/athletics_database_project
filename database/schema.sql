@@ -17,8 +17,10 @@ CREATE TABLE Reprezentanci_zawodnikow(
     imie VARCHAR(100) NOT NULL,
     nazwisko VARCHAR(100) NOT NULL,
     adres_email VARCHAR(100) NOT NULL,
+    CONSTRAINT imie_check CHECK (imie ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
+    CONSTRAINT nazwisko_check CHECK (nazwisko ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
     UNIQUE (adres_email)
-    );
+);
 
 CREATE TABLE Konkurencje(
     id_konkurencji SERIAL PRIMARY KEY,
@@ -41,6 +43,8 @@ CREATE TABLE Trenerzy(
     imie VARCHAR(50) NOT NULL,
     nazwisko VARCHAR(50) NOT NULL,
     adres_email VARCHAR(100) NOT NULL,
+    CONSTRAINT imie_check CHECK (imie ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
+    CONSTRAINT nazwisko_check CHECK (nazwisko ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
     UNIQUE (adres_email)
     );
 
@@ -54,6 +58,8 @@ CREATE TABLE Zawodnicy(
     id_reprezentanta INT NULL REFERENCES Reprezentanci_zawodnikow(id_reprezentanta) ON DELETE SET NULL,
     CONSTRAINT data_urodzenia_check CHECK (data_urodzenia <= CURRENT_DATE),
     CONSTRAINT plec_check CHECK (plec IN ('K', 'M')),
+    CONSTRAINT imie_check CHECK (imie ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
+    CONSTRAINT nazwisko_check CHECK (nazwisko ~* '^[a-ząćęłńóśźż]{2,}([ \-][a-ząćęłńóśźż]+)*$'),
     UNIQUE (imie, nazwisko, data_urodzenia, plec)
     );
 
@@ -89,7 +95,9 @@ CREATE TABLE Stadiony(
     nazwa VARCHAR(100) NOT NULL,
     miasto VARCHAR(100) NOT NULL,
     id_panstwa INT NOT NULL REFERENCES Panstwa(id_panstwa),
+    CONSTRAINT nazwa_stadionu_check CHECK (nazwa ~ '^[[:alnum:]][[:alnum:] .,-]*$'),
     UNIQUE (nazwa)
+    
 );
 CREATE TABLE Typy_zawodow(
     id_typu_zawodow SERIAL PRIMARY KEY,
@@ -219,3 +227,4 @@ CREATE TRIGGER trg_walidacja_dat_wyniku
 BEFORE INSERT OR UPDATE ON Wyniki
 FOR EACH ROW
 EXECUTE FUNCTION waliduj_date_wyniku();
+
