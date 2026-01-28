@@ -5,9 +5,6 @@ from database_mgm_func.db_connection import get_connection
 
 
 def get_athlete_representatives(filter_by=None, search_term=None, **advanced_filters):
-    """
-    Pobiera listę przedstawicieli zawodników z obsługą filtrów podstawowych i zaawansowanych (sidebar).
-    """
     conn = get_connection()
 
     base_query = """

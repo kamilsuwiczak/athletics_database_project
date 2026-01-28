@@ -76,10 +76,6 @@ def add_world_record(id_konkurencji, id_zawodnika, rezultat, data):
         return False, _short_db_error(e)
 
 def update_world_record(old_composite_id, rezultat, data):
-    """
-    Edycja pozwala zmienić wynik i datę. 
-    Zmiana zawodnika lub konkurencji wymagałaby usunięcia i dodania nowego wpisu (ze względu na PK).
-    """
     conn = get_connection()
     try:
         id_k, id_z = old_composite_id.split('_')

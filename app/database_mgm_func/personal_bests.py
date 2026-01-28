@@ -6,7 +6,6 @@ from database_mgm_func.error_handler import _short_db_error
 
 
 def get_personal_bests(id_zawodnika):
-    """Pobiera obecne rekordy życiowe zawodnika"""
     conn = get_connection()
     query = """
         SELECT k.id_konkurencji, 
@@ -24,16 +23,12 @@ def get_personal_bests(id_zawodnika):
         return cur.fetchall()
 
 def get_all_disciplines():
-    """Pobiera listę wszystkich dostępnych konkurencji"""
     conn = get_connection()
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute("SELECT id_konkurencji, nazwa FROM Konkurencje ORDER BY nazwa ASC")
         return cur.fetchall()
 
 def upsert_personal_best(id_zawodnika, id_konkurencji, rezultat, data, punkty):
-    """
-    Dodaje nowy rekord lub aktualizuje istniejący (ON CONFLICT).
-    """
     conn = get_connection()
     try:
         with conn.cursor() as cur:
@@ -54,7 +49,6 @@ def upsert_personal_best(id_zawodnika, id_konkurencji, rezultat, data, punkty):
         return False, _short_db_error(e)
 
 def delete_personal_best(id_zawodnika, id_konkurencji):
-    """Usuwa rekord życiowy w danej konkurencji"""
     conn = get_connection()
     try:
         with conn.cursor() as cur:

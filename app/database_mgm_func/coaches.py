@@ -6,9 +6,6 @@ from database_mgm_func.error_handler import _short_db_error
 
 
 def get_coaches(filter_by=None, search_term=None, **advanced_filters):
-    """
-    Pobiera listę trenerów z obsługą filtrów podstawowych i zaawansowanych (sidebar).
-    """
     conn = get_connection()
     
     base_query = """

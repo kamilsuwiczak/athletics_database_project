@@ -7,10 +7,6 @@ from database_mgm_func.error_handler import _short_db_error
 
 
 def get_athletes(filter_by=None, search_term=None, **advanced_filters):
-    """
-    Pobiera zawodników z uwzględnieniem filtrów podstawowych (search_term)
-    oraz zaawansowanych (**advanced_filters).
-    """
     conn = get_connection()
 
     base_query = """
@@ -133,7 +129,6 @@ def delete_athletes(ids_to_delete):
 
 
 def get_athlete_coaches_ids(id_zawodnika):
-    """Pobiera listę samych ID trenerów przypisanych do zawodnika"""
     conn = get_connection()
     with conn.cursor() as cur:
         cur.execute("SELECT id_trenera FROM Trenerzy_zawodnicy WHERE id_zawodnika = %s", (id_zawodnika,))
@@ -141,7 +136,6 @@ def get_athlete_coaches_ids(id_zawodnika):
 
 
 def update_athlete_coaches(id_zawodnika, list_of_coach_ids):
-    """Synchronizuje tabelę łączącą - usuwa stare i wstawia nowe relacje"""
     conn = get_connection()
     try:
         with conn.cursor() as cur:
@@ -159,10 +153,6 @@ def update_athlete_coaches(id_zawodnika, list_of_coach_ids):
     
 
 def get_all_competition_types():
-    """
-    Pobiera listę unikalnych nazw typów zawodów (np. 'Igrzyska Olimpijskie', 'Mistrzostwa Świata').
-    Potrzebne do listy rozwijanej w Streamlit.
-    """
     conn = get_connection()
     try:
         with conn.cursor() as cur:
@@ -172,10 +162,6 @@ def get_all_competition_types():
         return []
 
 def get_top_5_medalists_by_type(competition_type_name):
-    """
-    Zwraca TOP 5 zawodników z największą liczbą medali w danym typie zawodów.
-    Realizuje logikę funkcji SQL 'zlicz_medale_w_typie_zawodow' w formie zbiorczego zestawienia.
-    """
     conn = get_connection()
     
     query = """
