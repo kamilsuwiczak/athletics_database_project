@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_venues(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
@@ -45,7 +46,6 @@ def get_venues(filter_by=None, search_term=None, **advanced_filters):
             print(f"SQL Error: {e}")
             return []
 
-# --- Reszta funkcji (add_venue, update_venue, delete_venues) BEZ ZMIAN ---
 def add_venue(nazwa, miasto, id_panstwa):
     conn = get_connection()
     try:
@@ -55,7 +55,7 @@ def add_venue(nazwa, miasto, id_panstwa):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_venue(id_stadionu, nazwa, miasto, id_panstwa):
     conn = get_connection()
@@ -66,7 +66,7 @@ def update_venue(id_stadionu, nazwa, miasto, id_panstwa):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_venues(ids):
     conn = get_connection()
@@ -77,4 +77,4 @@ def delete_venues(ids):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)

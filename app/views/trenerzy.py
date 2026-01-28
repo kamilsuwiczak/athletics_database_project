@@ -1,6 +1,7 @@
 import streamlit as st
 import database_mgm_func.coaches as coaches_db
 from components.data_manager import render_crud_view
+import utils.validate_email as validate_email
 
 @st.dialog("Dodaj nowego trenera")
 def add_modal():
@@ -12,6 +13,10 @@ def add_modal():
         if st.form_submit_button("Zapisz w bazie", use_container_width=True):
             if not imie or not nazwisko or not adres_email:
                 st.error("Wszystkie pola (Imię, Nazwisko, Email) są wymagane.")
+                return
+            
+            if not validate_email.is_valid_email(adres_email):
+                st.error("Nieprawidłowy format adresu email.")
                 return
             
             success, error = coaches_db.add_coach(imie, nazwisko, adres_email)

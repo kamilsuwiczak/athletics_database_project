@@ -1,6 +1,7 @@
 import streamlit as st
 import database_mgm_func.athlete_representatives as representatives_db
 from components.data_manager import render_crud_view
+import utils.validate_email as validate_email
 
 @st.dialog("Dodaj nowego trenera")
 def add_modal():
@@ -14,6 +15,10 @@ def add_modal():
                 st.error("Wszystkie pola (Imię, Nazwisko, Email) są wymagane.")
                 return
             
+
+            if not validate_email.is_valid_email(adres_email):
+                st.error("Nieprawidłowy format adresu email.")
+                return
             success, error = representatives_db.add_athlete_representative(imie, nazwisko, adres_email)
             
             if success:
@@ -41,6 +46,9 @@ def edit_modal(id_reprezentanta):
         
         if st.form_submit_button("Zapisz zmiany", use_container_width=True, type="primary"):
             if imie and nazwisko and adres_email:
+                if not validate_email.is_valid_email(adres_email):
+                    st.error("Nieprawidłowy format adresu email.")
+                    return  
                 success, error = representatives_db.update_athlete_representative(
                     id_reprezentanta, imie, nazwisko, adres_email
                 )

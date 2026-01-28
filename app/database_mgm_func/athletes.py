@@ -1,12 +1,14 @@
 import streamlit as st
 import psycopg2
+from psycopg2 import errors
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 
 def get_athletes(filter_by=None, search_term=None, **advanced_filters):
     """
-    Pobiera zawodników z uwzględnieniem filtrów podstawowych (search_term) 
+    Pobiera zawodników z uwzględnieniem filtrów podstawowych (search_term)
     oraz zaawansowanych (**advanced_filters).
     """
     conn = get_connection()
@@ -19,7 +21,7 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
                z.plec AS "Płeć", 
                p.nazwa AS "Kraj",
                COALESCE(STRING_AGG(t.imie || ' ' || t.nazwisko, ', '), 'Brak') AS "Trenerzy",
-               r.imie || ' ' || r.nazwisko AS "Przedstawiciel"
+               COALESCE(r.imie || ' ' || r.nazwisko, 'Brak') AS "Przedstawiciel"
         FROM Zawodnicy z 
         JOIN Panstwa p ON z.id_panstwa = p.id_panstwa
         LEFT JOIN Trenerzy_zawodnicy zt ON z.id_zawodnika = zt.id_zawodnika
@@ -44,7 +46,6 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
             else:
                 params.append(f"%{search_term}%")
 
-    
     if advanced_filters.get('f_imie'):
         conditions.append("z.imie ILIKE %s")
         params.append(f"%{advanced_filters['f_imie']}%")
@@ -60,7 +61,7 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
     if advanced_filters.get('f_plec'):
         conditions.append("z.plec = %s")
         params.append(advanced_filters['f_plec'])
-        
+
     if advanced_filters.get('f_rok_ur_min'):
         conditions.append("EXTRACT(YEAR FROM z.data_urodzenia) >= %s")
         params.append(advanced_filters['f_rok_ur_min'])
@@ -80,10 +81,9 @@ def get_athletes(filter_by=None, search_term=None, **advanced_filters):
         try:
             cur.execute(full_query, params)
             return cur.fetchall()
-        except Exception as e:
-    
-            print(f"SQL Error: {e}") 
+        except Exception:
             return []
+
 
 def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
     conn = get_connection()
@@ -92,17 +92,17 @@ def add_athlete(imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None
             cur.execute("""
                 CALL dodaj_zawodnika(%s, %s, %s, %s, %s, %s, %s)
             """, (imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta, None))
-            
+
             result = cur.fetchone()
             new_id = result[0]
-            
+
             conn.commit()
             return True, new_id
-            
+
     except Exception as e:
         conn.rollback()
-        print(f"Błąd SQL: {e}")
-        return False, str(e)
+        return False, _short_db_error(e)
+
 
 def update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_reprezentanta=None):
     conn = get_connection()
@@ -117,8 +117,8 @@ def update_athlete(id_zawodnika, imie, nazwisko, data_ur, plec, id_panstwa, id_r
             return True, None
     except Exception as e:
         conn.rollback()
-        error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-        return False, error_msg
+        return False, _short_db_error(e)
+
 
 def delete_athletes(ids_to_delete):
     conn = get_connection()
@@ -127,13 +127,10 @@ def delete_athletes(ids_to_delete):
             cur.execute("DELETE FROM Zawodnicy WHERE id_zawodnika = ANY(%s)", (ids_to_delete,))
             conn.commit()
             return True, None
-    except psycopg2.errors.ForeignKeyViolation:
+    except Exception as e:
         conn.rollback()
-        return False, 'Nie można usunąć zawodnika, ponieważ jest przypisany do jednego lub więcej wyników.'
-    except Exception:
-        conn.rollback()
-        return False, 'Błąd podczas usuwania zawodników'
-    
+        return False, _short_db_error(e)
+
 
 def get_athlete_coaches_ids(id_zawodnika):
     """Pobiera listę samych ID trenerów przypisanych do zawodnika"""
@@ -141,6 +138,7 @@ def get_athlete_coaches_ids(id_zawodnika):
     with conn.cursor() as cur:
         cur.execute("SELECT id_trenera FROM Trenerzy_zawodnicy WHERE id_zawodnika = %s", (id_zawodnika,))
         return [row[0] for row in cur.fetchall()]
+
 
 def update_athlete_coaches(id_zawodnika, list_of_coach_ids):
     """Synchronizuje tabelę łączącą - usuwa stare i wstawia nowe relacje"""
@@ -157,4 +155,4 @@ def update_athlete_coaches(id_zawodnika, list_of_coach_ids):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)

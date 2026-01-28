@@ -1,6 +1,8 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
+
 
 def get_statuses(filter_by=None, search_term=None):
     conn = get_connection()
@@ -36,7 +38,7 @@ def add_result_status(status_wyniku):
                 return True, None
         except Exception as e:
             conn.rollback()
-            return False, str(e)
+            return False, _short_db_error(e)
 
 def delete_result_statuses(ids_to_delete):
     with get_connection() as conn:
@@ -47,7 +49,7 @@ def delete_result_statuses(ids_to_delete):
                 return True, None
         except Exception as e:
             conn.rollback()
-            return False, str(e)
+            return False, _short_db_error(e)
 
 def update_result_status(id_statusu, status_wyniku):
     with get_connection() as conn:
@@ -62,5 +64,4 @@ def update_result_status(id_statusu, status_wyniku):
                 return True, None
         except Exception as e:
             conn.rollback()
-            error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
-            return False, error_msg
+            return False, _short_db_error(e)

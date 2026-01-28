@@ -2,6 +2,7 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_countries(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()

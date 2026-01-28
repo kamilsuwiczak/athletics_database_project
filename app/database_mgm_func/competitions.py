@@ -1,12 +1,11 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_competitions(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
-    
-    # 1. Bazowe zapytanie z JOINami
-    # Aliasy muszą być zgodne z tym, co wyświetlasz w tabeli (np. "Typ", "Kraj")
+   
     base_query = """
         SELECT z.id_zawody,
                z.nazwa,
@@ -81,7 +80,7 @@ def add_competition(nazwa, id_typu, start, koniec, id_panstwa, id_stadionu):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_competition(id_zawody, nazwa, id_typu, start, koniec, id_panstwa, id_stadionu):
     conn = get_connection()
@@ -97,7 +96,7 @@ def update_competition(id_zawody, nazwa, id_typu, start, koniec, id_panstwa, id_
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_competitions(ids):
     conn = get_connection()
@@ -108,4 +107,4 @@ def delete_competitions(ids):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)

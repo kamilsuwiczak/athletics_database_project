@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_results(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
@@ -62,7 +63,7 @@ def add_result(id_zawodnika, id_konkurencji, id_zawody, id_statusu, rezultat, mi
         conn.rollback()
         if "unique constraint" in str(e).lower():
             return False, "Ten zawodnik ma już wpisany wynik w tej konkurencji na tych zawodach."
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_result(id_wyniku, id_zawodnika, id_konkurencji, id_zawody, id_statusu, rezultat, miejsce, data):
     conn = get_connection()
@@ -78,7 +79,7 @@ def update_result(id_wyniku, id_zawodnika, id_konkurencji, id_zawody, id_statusu
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_results(ids):
     conn = get_connection()
@@ -89,7 +90,7 @@ def delete_results(ids):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def get_raw_result(id_wyniku):
     conn = get_connection()

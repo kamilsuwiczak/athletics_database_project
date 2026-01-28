@@ -2,6 +2,7 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_disciplines(filter_by=None, search_term=None):
     conn = get_connection()
@@ -41,7 +42,7 @@ def add_discipline(nazwa, rodzaj):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_disciplines(ids_to_delete):
     conn = get_connection()
@@ -52,7 +53,7 @@ def delete_disciplines(ids_to_delete):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_discipline(id_konkurencji, nazwa, rodzaj):
     conn = get_connection()
@@ -67,5 +68,5 @@ def update_discipline(id_konkurencji, nazwa, rodzaj):
             return True, None
     except Exception as e:
         conn.rollback()
-        error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+        error_msg = _short_db_error(e)
         return False, error_msg

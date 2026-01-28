@@ -2,6 +2,7 @@ import psycopg2
 import streamlit as st
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 
 def get_coaches(filter_by=None, search_term=None, **advanced_filters):
@@ -10,7 +11,6 @@ def get_coaches(filter_by=None, search_term=None, **advanced_filters):
     """
     conn = get_connection()
     
-    # Bazowe zapytanie
     base_query = """
         SELECT id_trenera, 
                imie AS "Imię", 
@@ -22,7 +22,6 @@ def get_coaches(filter_by=None, search_term=None, **advanced_filters):
     conditions = []
     params = []
 
-    # 1. Obsługa starego searchbara (jeśli render_crud_view go używa)
     if filter_by and search_term:
         mapping = {
             'imie': "imie ILIKE %s",
@@ -34,8 +33,6 @@ def get_coaches(filter_by=None, search_term=None, **advanced_filters):
             conditions.append(mapping[filter_by])
             params.append(search_term if filter_by == 'id' else f"%{search_term}%")
 
-    # 2. Obsługa Sidebaru (Advanced Filters)
-    # Tu naprawiamy błąd: odczytujemy argumenty przekazane z widoku
     if advanced_filters.get('f_imie'):
         conditions.append("imie ILIKE %s")
         params.append(f"%{advanced_filters['f_imie']}%")
@@ -48,7 +45,6 @@ def get_coaches(filter_by=None, search_term=None, **advanced_filters):
         conditions.append("adres_email ILIKE %s")
         params.append(f"%{advanced_filters['f_email']}%")
 
-    # 3. Składanie zapytania
     where_clause = " WHERE " + " AND ".join(conditions) if conditions else ""
     full_query = base_query + where_clause + " ORDER BY nazwisko ASC, imie ASC"
 

@@ -2,6 +2,7 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_world_records(filter_by=None, search_term=None, **advanced_filters):
     conn = get_connection()
@@ -32,7 +33,7 @@ def get_world_records(filter_by=None, search_term=None, **advanced_filters):
             conditions.append("rs.id_konkurencji = %s AND rs.id_zawodnika = %s")
             params.extend([id_k, id_z])
         except ValueError:
-            pass # Błędny format ID
+            pass 
 
     if advanced_filters.get('f_konkurencja'):
         conditions.append("k.nazwa ILIKE %s")
@@ -72,7 +73,7 @@ def add_world_record(id_konkurencji, id_zawodnika, rezultat, data):
         conn.rollback()
         if "unique constraint" in str(e).lower() or "primary key" in str(e).lower():
             return False, "Ten zawodnik ma już rekord świata w tej konkurencji."
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_world_record(old_composite_id, rezultat, data):
     """
@@ -92,7 +93,7 @@ def update_world_record(old_composite_id, rezultat, data):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_world_records(composite_ids):
     conn = get_connection()
@@ -109,7 +110,7 @@ def delete_world_records(composite_ids):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def get_options_data():
     conn = get_connection()

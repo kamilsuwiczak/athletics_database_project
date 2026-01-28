@@ -2,6 +2,7 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_coaches_athletes(filter_by = None, search_term = None):
     with get_connection() as conn:
@@ -40,7 +41,7 @@ def add_coach_athlete(id_trenera, id_zawodnika):
                 return True, None
         except Exception as e:
             conn.rollback()
-            return False, str(e)
+            return False, _short_db_error(e)
 
 def delete_coaches_athletes(pairs_to_delete):
     with get_connection() as conn:
@@ -52,7 +53,7 @@ def delete_coaches_athletes(pairs_to_delete):
                 return True, None
         except Exception as e:
             conn.rollback()
-            return False, str(e)
+            return False, _short_db_error(e)
 
 def update_coach_athlete(old_id_trenera, old_id_zawodnika, new_id_trenera, new_id_zawodnika):
     with get_connection() as conn:
@@ -67,4 +68,4 @@ def update_coach_athlete(old_id_trenera, old_id_zawodnika, new_id_trenera, new_i
                 return True, None
         except Exception as e:
             conn.rollback()
-            return False, str(e)
+            return False, _short_db_error(e)

@@ -2,6 +2,8 @@ import streamlit as st
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
+
 
 def get_personal_bests(id_zawodnika):
     """Pobiera obecne rekordy życiowe zawodnika"""
@@ -49,7 +51,7 @@ def upsert_personal_best(id_zawodnika, id_konkurencji, rezultat, data, punkty):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_personal_best(id_zawodnika, id_konkurencji):
     """Usuwa rekord życiowy w danej konkurencji"""
@@ -64,4 +66,4 @@ def delete_personal_best(id_zawodnika, id_konkurencji):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)

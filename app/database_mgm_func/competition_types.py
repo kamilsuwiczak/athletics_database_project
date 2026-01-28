@@ -1,6 +1,7 @@
 import streamlit as st
 from psycopg2.extras import RealDictCursor
 from database_mgm_func.db_connection import get_connection
+from database_mgm_func.error_handler import _short_db_error
 
 def get_competition_types(filter_by=None, search_term=None):
     conn = get_connection()
@@ -37,7 +38,7 @@ def add_competition_type(nazwa_typu):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def delete_competition_types(ids_to_delete):
     conn = get_connection()
@@ -48,7 +49,7 @@ def delete_competition_types(ids_to_delete):
             return True, None
     except Exception as e:
         conn.rollback()
-        return False, str(e)
+        return False, _short_db_error(e)
 
 def update_competition_type(id_typu_zawodow, nazwa_typu):
     conn = get_connection()
@@ -63,5 +64,5 @@ def update_competition_type(id_typu_zawodow, nazwa_typu):
             return True, None
     except Exception as e:
         conn.rollback()
-        error_msg = str(e).split('CONTEXT:')[0] if 'CONTEXT:' in str(e) else str(e)
+        error_msg = _short_db_error(e)
         return False, error_msg
